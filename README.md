@@ -16,6 +16,10 @@ There are a number of dependencies in this package, since the ABB robot is opera
 * ros-kinetic-rosserial-arduino
 * ros-kinetic-rosserial
 
+Dont forget to clone 
+
+'git clone https://github.com/ros-drivers/rosserial.git'
+
 Now,Extract the metapackage `Quadruped_Foots` into `${ros_workspace}/src`. `catkin_make` your workspace.
 
 
@@ -26,18 +30,14 @@ To be updated...
 
 ## 3. How to Use
 
-### 3.1. CLI Controller
+### 3.1. Serial Arduino 
 
-You can use the CLI controller. Type `rosrun rise_assembler assembler_manual_controller` in the terminal, and you will get a CLI controller displayed up on your console. To see the list of commands, type `h` and `Enter`.
+You can use the connect to the  controller. Type `rosrun rosserial_python serial_node.py _port:=/dev/ttyACM1` in the terminal, and you will get a correct port `/dev/ttyACM1`.
 
-### 3.2. GUI Controller
+### 3.2. Convert the analog singnal to boolean
 
-You can use the GUI controller. Type `rosrun rise_assembler assembler_gui_controller` in the terminal, and then the GUI console will pop out. This program is not complete yet, so it might be prone to errors. Please be careful when using the program.
+You can type ` rosrun foot_pressure_sensor sub_pressure.py` in the terminal. Please be careful when using the program.
+this create a topic
 
-### 3.3. Path-Planning APIs
-
-The script `assembler_controller.py` provides a convenient method to plan paths. One should give the pose of end-effector in the following form; [x, y, z, roll, pitch, yaw].
-
-* `move_to_pose()`: move to designated pose 
-* `move_by_cartesian_path()`: move to designated pose, in straight path.
-* `rotate_joint()`: rotate specific joint by desiged angle. This method gets the angles of all 6 joints, add the given value to specified joint, and then makes the robot go to that configuration. Therefore, the joints that are not designated to move might move by a little angle, due to controller errors.
+* `/Foots_Touch`: move to designated pose 
+* `/bolean_foots`: move to designated pose, in straight path.
