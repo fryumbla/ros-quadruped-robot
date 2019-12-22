@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: quadruped_description
+    relative_path: urdf/quadruped.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/quadruped.srdf
+  CONFIG:
+    author_name: Francisco Yumbla
+    author_email: fryumbla@espol.edu.ec
+    generated_timestamp: 1576895434

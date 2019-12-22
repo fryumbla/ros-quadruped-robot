@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot name="quadruped">
+    <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+    <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
+    <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
+    <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
+    <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
+    <group name="front_right_leg">
+        <chain base_link="body" tip_link="front_right_d" />
+    </group>
+    <group name="front_left_leg">
+        <chain base_link="body" tip_link="front_left_d" />
+    </group>
+    <group name="back_left_leg">
+        <chain base_link="body" tip_link="back_left_d" />
+    </group>
+    <group name="back_right_leg">
+        <chain base_link="body" tip_link="back_right_d" />
+    </group>
+    <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
+    <group_state name="home_front_right_leg" group="front_right_leg">
+        <joint name="front_left_joint1" value="0" />
+        <joint name="front_left_joint2" value="0" />
+    </group_state>
+    <group_state name="home_front_left_leg" group="front_left_leg">
+        <joint name="front_right_joint1" value="0" />
+        <joint name="front_right_joint2" value="0" />
+    </group_state>
+    <group_state name="home_back_left_leg" group="back_left_leg">
+        <joint name="back_left_joint1" value="0" />
+        <joint name="back_left_joint2" value="0" />
+    </group_state>
+    <group_state name="home_left_leg" group="back_right_leg">
+        <joint name="back_right_joint1" value="0" />
+        <joint name="back_right_joint2" value="0" />
+    </group_state>
+    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="back_left_d" link2="back_left_u" reason="Adjacent" />
+    <disable_collisions link1="back_left_d" link2="back_right_d" reason="Never" />
+    <disable_collisions link1="back_left_d" link2="back_right_u" reason="Never" />
+    <disable_collisions link1="back_left_d" link2="front_right_d" reason="Never" />
+    <disable_collisions link1="back_left_d" link2="front_right_u" reason="Never" />
+    <disable_collisions link1="back_left_u" link2="back_right_d" reason="Never" />
+    <disable_collisions link1="back_left_u" link2="back_right_u" reason="Never" />
+    <disable_collisions link1="back_left_u" link2="body" reason="Adjacent" />
+    <disable_collisions link1="back_left_u" link2="front_right_d" reason="Never" />
+    <disable_collisions link1="back_left_u" link2="front_right_u" reason="Never" />
+    <disable_collisions link1="back_right_d" link2="back_right_u" reason="Adjacent" />
+    <disable_collisions link1="back_right_d" link2="front_left_d" reason="Never" />
+    <disable_collisions link1="back_right_d" link2="front_left_u" reason="Never" />
+    <disable_collisions link1="back_right_u" link2="body" reason="Adjacent" />
+    <disable_collisions link1="back_right_u" link2="front_left_d" reason="Never" />
+    <disable_collisions link1="back_right_u" link2="front_left_u" reason="Never" />
+    <disable_collisions link1="body" link2="front_left_u" reason="Adjacent" />
+    <disable_collisions link1="body" link2="front_right_u" reason="Adjacent" />
+    <disable_collisions link1="front_left_d" link2="front_left_u" reason="Adjacent" />
+    <disable_collisions link1="front_left_d" link2="front_right_d" reason="Never" />
+    <disable_collisions link1="front_left_d" link2="front_right_u" reason="Never" />
+    <disable_collisions link1="front_left_u" link2="front_right_d" reason="Never" />
+    <disable_collisions link1="front_left_u" link2="front_right_u" reason="Never" />
+    <disable_collisions link1="front_right_d" link2="front_right_u" reason="Adjacent" />
+</robot>

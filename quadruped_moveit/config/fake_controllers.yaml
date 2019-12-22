@@ -1,0 +1,17 @@
+controller_list:
+  - name: fake_front_right_leg_controller
+    joints:
+      - front_left_joint1
+      - front_left_joint2
+  - name: fake_front_left_leg_controller
+    joints:
+      - front_right_joint1
+      - front_right_joint2
+  - name: fake_back_left_leg_controller
+    joints:
+      - back_left_joint1
+      - back_left_joint2
+  - name: fake_back_right_leg_controller
+    joints:
+      - back_right_joint1
+      - back_right_joint2

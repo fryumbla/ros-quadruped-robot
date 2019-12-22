@@ -1,0 +1,163 @@
+<!-- the version of Inventor -->
+<?xml version ="1.0" ?>
+
+<robot name="mark8" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <material name="gray">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+
+  <link name="body">
+    <visual>
+      <origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://testbot_description/mark8_meshes/frame_aluminum_motor_case.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+  </link>
+
+  <link name="front_left_u">
+    <visual>
+      <origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://testbot_description/mark8_meshes/joint_gear_upper_assembly.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+  </link>
+
+  <link name="front_right_u">
+    <visual>
+      <origin rpy="1.57 3.14 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://testbot_description/mark8_meshes/joint_gear_upper_assembly.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+  </link>
+
+  <link name="back_left_u">
+    <visual>
+      <origin rpy="1.57 3.14 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://testbot_description/mark8_meshes/joint_gear_upper_assembly.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+  </link>
+
+  <link name="back_right_u">
+    <visual>
+      <origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://testbot_description/mark8_meshes/joint_gear_upper_assembly.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+  </link>
+
+  <link name="front_left_d">
+    <visual>
+      <origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://testbot_description/mark8_meshes/Assembly_lower_link_v2.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+  </link>
+
+  <link name="front_right_d">
+    <visual>
+      <origin rpy="-1.57 0 -1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://testbot_description/mark8_meshes/Assembly_lower_link_v2.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+  </link>
+
+  <link name="back_left_d">
+    <visual>
+      <origin rpy="-1.57 0 -1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://testbot_description/mark8_meshes/Assembly_lower_link_v2.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+  </link>
+
+  <link name="back_right_d">
+    <visual>
+      <origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://testbot_description/mark8_meshes/Assembly_lower_link_v2.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+  </link>
+
+  <joint name="front_right_joint1" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="body"/>
+    <child link="front_left_u"/>
+    <origin xyz="0.11 0.05 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="front_left_joint1" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="body"/>
+    <child link="front_right_u"/>
+    <origin xyz="0.11 -0.05 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="back_left_joint1" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="body"/>
+    <child link="back_left_u"/>
+    <origin xyz="-0.11 0.05 0" rpy="0 0 3.14" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="back_right_joint1" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="body"/>
+    <child link="back_right_u"/>
+    <origin xyz="-0.11 -0.05 0" rpy="0 0 3.14" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="front_right_joint2" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="front_left_u"/>
+    <child link="front_left_d"/>
+    <origin xyz="0.4 0.005 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="front_left_joint2" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="front_right_u"/>
+    <child link="front_right_d"/>
+    <origin xyz="0.4 -0.005 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="back_left_joint2" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="back_left_u"/>
+    <child link="back_left_d"/>
+    <origin xyz="0.4 -0.005 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="back_right_joint2" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="back_right_u"/>
+    <child link="back_right_d"/>
+    <origin xyz="0.4 0.005 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+</robot>

@@ -1,0 +1,407 @@
+<?xml version ="1.0" encoding="utf-8"?>
+
+<robot name="quadruped" >
+
+
+  <link name="dummy">
+  </link>
+
+  <material name="gray">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+
+  <joint name="dummy_joint" type="fixed">
+     <parent link="dummy"/>
+     <child link="body"/>
+  </joint>
+
+  <link name="body">
+    <inertial>
+      <mass value="1" />
+      <inertia ixx="1" ixy="0"  ixz="0"
+               iyy="1" iyz="0"
+               izz="1" />
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://quadruped_description/meshes/frame_aluminum_motor_case.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="1.57 0 1.57" />
+      <geometry>
+        <mesh
+          filename="package://quadruped_description/meshes/frame_aluminum_motor_case.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="front_left_u">
+    <inertial>
+      <mass value="1" />
+      <inertia ixx="1" ixy="0"  ixz="0"
+               iyy="1" iyz="0"
+               izz="1" />
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://quadruped_description/meshes/joint_gear_upper_assembly.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="1.57 0 1.57" />
+      <geometry>
+        <mesh
+          filename="package://quadruped_description/meshes/joint_gear_upper_assembly.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="front_right_u">
+    <inertial>
+      <mass value="1" />
+      <inertia ixx="1" ixy="0"  ixz="0"
+               iyy="1" iyz="0"
+               izz="1" />
+    </inertial>
+    <visual>
+      <origin rpy="1.57 3.14 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://quadruped_description/meshes/joint_gear_upper_assembly.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="1.57 3.14 1.57" />
+      <geometry>
+        <mesh
+          filename="package://quadruped_description/meshes/joint_gear_upper_assembly.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="back_left_u">
+    <inertial>
+      <mass value="1" />
+      <inertia ixx="1" ixy="0"  ixz="0"
+               iyy="1" iyz="0"
+               izz="1" />
+    </inertial>
+    <visual>
+      <origin rpy="1.57 3.14 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://quadruped_description/meshes/joint_gear_upper_assembly.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="1.57 3.14 1.57" />
+      <geometry>
+        <mesh
+          filename="package://quadruped_description/meshes/joint_gear_upper_assembly.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="back_right_u">
+    <inertial>
+      <mass value="1" />
+      <inertia ixx="1" ixy="0"  ixz="0"
+               iyy="1" iyz="0"
+               izz="1" />
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://quadruped_description/meshes/joint_gear_upper_assembly.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="1.57 0 1.57" />
+      <geometry>
+        <mesh
+          filename="package://quadruped_description/meshes/joint_gear_upper_assembly.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="front_left_d">
+    <inertial>
+      <mass value="1" />
+      <inertia ixx="1" ixy="0"  ixz="0"
+               iyy="1" iyz="0"
+               izz="1" />
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://quadruped_description/meshes/Assembly_lower_link_v2.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="1.57 0 1.57" />
+      <geometry>
+        <mesh
+          filename="package://quadruped_description/meshes/Assembly_lower_link_v2.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="front_right_d">
+    <inertial>
+      <mass value="1" />
+      <inertia ixx="1" ixy="0"  ixz="0"
+               iyy="1" iyz="0"
+               izz="1" />
+    </inertial>
+    <visual>
+      <origin rpy="-1.57 0 -1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://quadruped_description/meshes/Assembly_lower_link_v2.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.57 0 -1.57" />
+      <geometry>
+        <mesh
+          filename="package://quadruped_description/meshes/Assembly_lower_link_v2.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="back_left_d">
+    <inertial>
+      <mass value="1" />
+      <inertia ixx="1" ixy="0"  ixz="0"
+               iyy="1" iyz="0"
+               izz="1" />
+    </inertial>
+    <visual>
+      <origin rpy="-1.57 0 -1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://quadruped_description/meshes/Assembly_lower_link_v2.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.57 0 -1.57" />
+      <geometry>
+        <mesh
+          filename="package://quadruped_description/meshes/Assembly_lower_link_v2.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="back_right_d">
+    <inertial>
+      <mass value="1" />
+      <inertia ixx="1" ixy="0"  ixz="0"
+               iyy="1" iyz="0"
+               izz="1" />
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://quadruped_description/meshes/Assembly_lower_link_v2.stl"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="1.57 0 1.57" />
+      <geometry>
+        <mesh
+          filename="package://quadruped_description/meshes/Assembly_lower_link_v2.stl" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="front_right_joint1" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="body"/>
+    <child link="front_left_u"/>
+    <origin xyz="0.11 0.05 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="front_left_joint1" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="body"/>
+    <child link="front_right_u"/>
+    <origin xyz="0.11 -0.05 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="back_left_joint1" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="body"/>
+    <child link="back_left_u"/>
+    <origin xyz="-0.11 0.05 0" rpy="0 0 3.14" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="back_right_joint1" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="body"/>
+    <child link="back_right_u"/>
+    <origin xyz="-0.11 -0.05 0" rpy="0 0 3.14" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="front_right_joint2" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="front_left_u"/>
+    <child link="front_left_d"/>
+    <origin xyz="0.4 0.005 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="front_left_joint2" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="front_right_u"/>
+    <child link="front_right_d"/>
+    <origin xyz="0.4 -0.005 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="back_left_joint2" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="back_left_u"/>
+    <child link="back_left_d"/>
+    <origin xyz="0.4 -0.005 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="back_right_joint2" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="back_right_u"/>
+    <child link="back_right_d"/>
+    <origin xyz="0.4 0.005 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- Transmissions for ROS Control -->
+
+  <transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_right_joint1">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_left_joint1">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="back_left_joint1">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="back_right_joint1">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor4">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_right_joint2">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor5">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_left_joint2">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor6">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran7">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="back_left_joint2">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor7">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran8">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="back_right_joint2">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor8">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <!-- ros_control plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/quadruped</robotNamespace>
+    </plugin>
+  </gazebo>
+
+
+
+</robot>
