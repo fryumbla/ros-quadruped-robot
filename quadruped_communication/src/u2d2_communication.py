@@ -36,31 +36,13 @@ ADDR_PRO_POSITION_D_GAIN    = 80
 ADDR_PRO_POSITION_I_GAIN    = 82
 ADDR_PRO_POSITION_P_GAIN    = 84
 
+ADDR_PRO_GOAL_VELOCITY      = 104
 ADDR_PRO_GOAL_POSITION      = 116
 
 #ONLY READ
+ADDR_PRO_PRESENT_VELOCITY   = 128
 ADDR_PRO_PRESENT_POSITION   = 132
-
-
-
-
-
-
-AX_TORQUE_ENABLE           = 24               # Control table address is different in Dynamixel model
-AX_LED                     = 25                 
-
-AX_GOAL_POSITION           = 30             #It is a position value of destination. 0 ~ 1,023 (0x3FF) is available. 
-                                            #The unit is 0.29°. If Goal Position is out of the range, 
-                                            #Angle Limit Error Bit (Bit 1) of Status Packet is returned as ‘1’ and Alarm is triggered as set in Alarm LED/Shutdown.
-AX_MOVING_SPEED            = 32
-AX_TORQUE_LIMIT            = 34
-
-#ONLY READ
-AX_PRESENT_POSITION        = 36
-AX_PRESENT_SPEED           = 38
-AX_PRESENT_LOAD            = 40
-AX_PRESENT_VOLTAGE         = 42
-AX_PRESENT_TEMPERATURE     = 43
+ADDR_PRO_PRESENT_TEMPERATURE= 146
 
 # Protocol version
 PROTOCOL_VERSION            = 2.0               # See which protocol version is used in the Dynamixel
@@ -105,7 +87,7 @@ def comunication0():
 
 
     for i in DXL_ID0:
-        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler0, i, AX_TORQUE_ENABLE, 0)
+        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler0, i, ADDR_PRO_TORQUE_ENABLE, 0)
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
         elif dxl_error != 0:
@@ -134,7 +116,7 @@ def comunication1():
     
 
     for i in DXL_ID1:
-        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler1, i, AX_TORQUE_ENABLE, 0)
+        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler1, i, ADDR_PRO_TORQUE_ENABLE, 0)
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
         elif dxl_error != 0:
@@ -146,7 +128,7 @@ def comunication1():
 
 def torque(portHandler, order):
     for i in DXL_ID1:
-        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, i, AX_TORQUE_ENABLE, order)
+        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, order)
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
         elif dxl_error != 0:
@@ -159,7 +141,7 @@ def torque(portHandler, order):
 
 def ini_position():
     for i in DXL_ID:
-        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, i, AX_GOAL_POSITION, 512)
+        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, i, ADDR_PRO_GOAL_POSITION, 512)
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
         elif dxl_error != 0:
@@ -169,7 +151,7 @@ def read_positions():
         # Read present position
     joint_position=[0,0,0,0]
     for i in DXL_ID1:
-        dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, i, AX_PRESENT_POSITION)#AX_PRESENT_POSITION
+        dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, i, ADDR_PRO_PRESENT_POSITION)
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
         elif dxl_error != 0:
@@ -183,7 +165,7 @@ def read_tempeture():
     # Read present temperature
     temperature=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     for i in DXL_ID:
-        dxl_present_temperature, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, i, AX_PRESENT_TEMPERATURE)
+        dxl_present_temperature, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, i, ADDR_PRO_PRESENT_TEMPERATURE)
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
         elif dxl_error != 0:
@@ -223,7 +205,7 @@ def convertValue2Radian(value):
 def callback(data):
       
     for i in DXL_ID:     
-        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, i, AX_GOAL_POSITION, convertRadian2Value(data.position[i-1]))
+        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, i, ADDR_PRO_GOAL_POSITION, convertRadian2Value(data.position[i-1]))
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
         elif dxl_error != 0:
