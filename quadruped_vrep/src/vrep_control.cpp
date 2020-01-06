@@ -1,6 +1,7 @@
 extern "C" {
+  // check the folder home
     #include "/home/francisco/quadruped_ws/src/quadruped_robot/quadruped_vrep/remoteApi/extApi.h"
-    
+ 
 }
 
 #include <iostream>
