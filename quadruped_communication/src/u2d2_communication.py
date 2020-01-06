@@ -149,15 +149,62 @@ def ini_position():
 
 def read_positions():
         # Read present position
-    joint_position=[0,0,0,0]
-    for i in DXL_ID1:
-        dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, i, ADDR_PRO_PRESENT_POSITION)
-        if dxl_comm_result != COMM_SUCCESS:
-            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-        elif dxl_error != 0:
-            print("%s" % packetHandler.getRxPacketError(dxl_error))
-        joint_position[i-1]=dxl_present_position
+    # joint_position=[0,0,0,0,0,0,0,0]
+    # for i in DXL_ID1:
+    #     dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, i, ADDR_PRO_PRESENT_POSITION)
+    #     if dxl_comm_result != COMM_SUCCESS:
+    #         print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+    #     elif dxl_error != 0:
+    #         print("%s" % packetHandler.getRxPacketError(dxl_error))
+    #     joint_position[i-1]=dxl_present_position
 
+    ########################################## read position ###################################
+    # Read Dynamixel#1 present position
+    dxl1_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler0, 1, ADDR_PRO_PRESENT_POSITION)
+    # Read Dynamixel#2 present position
+    dxl2_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler0, 2, ADDR_PRO_PRESENT_POSITION)
+    # Read Dynamixel#3 present position
+    dxl3_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, 3, ADDR_PRO_PRESENT_POSITION)
+    # Read Dynamixel#4 present position
+    dxl4_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, 4, ADDR_PRO_PRESENT_POSITION)
+    # Read Dynamixel#5 present position
+    dxl5_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler0, 5, ADDR_PRO_PRESENT_POSITION)
+    # Read Dynamixel#6 present position
+    dxl6_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler0, 6, ADDR_PRO_PRESENT_POSITION)
+    # Read Dynamixel#7 present position
+    dxl7_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, 7, ADDR_PRO_PRESENT_POSITION)
+    # Read Dynamixel#8 present position
+    dxl8_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, 8, ADDR_PRO_PRESENT_POSITION)
+
+    #1 degree ~ 90
+    offset1 = -410
+    offset2 = -80
+    offset3 = 167
+    offset4 = -300
+    offset5 = 0
+    offset6 = -300
+    offset7 = -168
+    offset8 = -120
+
+    theta1 = (20475.0 + offset1 -dxl1_present_position)*(15.0/120.0)*(360.0/4095.0)-90.0
+    theta2 = (16380.0 + offset2 -dxl2_present_position)*(15.0/120.0)*(360.0/4095.0)
+    theta3 = ((dxl3_present_position-offset3)*(15.0/120.0)*(360.0/4095.0))-90.0
+    theta4 = ((dxl4_present_position-offset4)*(15.0/120.0)*(360.0/4095.0))-45.0
+    theta5 = (20475.0 + offset5 -dxl5_present_position)*(15.0/120.0)*(360.0/4095.0)-90.0
+    theta6 = (16380.0 + offset6 -dxl6_present_position)*(15.0/120.0)*(360.0/4095.0)
+    theta7 = ((dxl7_present_position-offset7)*(15.0/120.0)*(360.0/4095.0))-90.0
+    theta8 = ((dxl8_present_position-offset8)*(15.0/120.0)*(360.0/4095.0))-45.0
+
+    print("[1]%.2f\t[2]%.2f\t[3]%.2f\t[4]%.2f\t[5]%.2f\t[6]%.2f\t[7]%.2f\t[8]%.2f " % (theta1,theta2,theta3,theta4,theta5,theta6,theta7,theta8))
+
+    joint_position[0] = theta1*3.1415/180.0
+    joint_position[1] = theta2*3.1415/180.0
+    joint_position[2] = theta3*3.1415/180.0
+    joint_position[3] = theta4*3.1415/180.0
+    joint_position[4] = theta5*3.1415/180.0
+    joint_position[5] = theta6*3.1415/180.0
+    joint_position[6] = theta7*3.1415/180.0
+    joint_position[7] = theta8*3.1415/180.0
 
     return joint_position
 
@@ -237,75 +284,70 @@ def main():
     comunication0()
     comunication1()
     
-    torque(DXL_ID0,portHandler0,1)
-    torque(DXL_ID1,portHandler1,1)
+    # torque(DXL_ID0,portHandler0,1)
+    # torque(DXL_ID1,portHandler1,1)
     
     # ini_position()
     # torque(0)
     
-    rospy.init_node('joint_publisher',anonymous=True)
+    # rospy.init_node('joint_publisher',anonymous=True)
 
-    joint_pub = rospy.Publisher('joint_states',JointState,queue_size=1)
-    joint_instance = JointState()
-    joint_instance.name.append("front_left_joint1")
-    joint_instance.name.append("front_left_joint2")
-    joint_instance.name.append("front_right_joint1")
-    joint_instance.name.append("front_right_joint2")
-    joint_instance.name.append("back_left_joint1")
-    joint_instance.name.append("back_left_joint2")
-    joint_instance.name.append("back_right_joint1")
-    joint_instance.name.append("back_right_joint2")
-    joint_instance.position.append(0.0)
-    joint_instance.position.append(0.0)
-    joint_instance.position.append(0.0)
-    joint_instance.position.append(0.0)
-    joint_instance.position.append(0.0)
-    joint_instance.position.append(0.0)
-    joint_instance.position.append(0.0)
-    joint_instance.position.append(0.0)
+    # joint_pub = rospy.Publisher('joint_states',JointState,queue_size=1)
+    # joint_instance = JointState()
+    # joint_instance.name.append("front_left_joint1")
+    # joint_instance.name.append("front_left_joint2")
+    # joint_instance.name.append("front_right_joint1")
+    # joint_instance.name.append("front_right_joint2")
+    # joint_instance.name.append("back_left_joint1")
+    # joint_instance.name.append("back_left_joint2")
+    # joint_instance.name.append("back_right_joint1")
+    # joint_instance.name.append("back_right_joint2")
+    # joint_position.append(0.0)
+    # joint_position.append(0.0)
+    # joint_position.append(0.0)
+    # joint_position.append(0.0)
+    # joint_position.append(0.0)
+    # joint_position.append(0.0)
+    # joint_position.append(0.0)
+    # joint_position.append(0.0)
            
-    # while not rospy.is_shutdown():
-        
-    #     joint_position_state=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-
-    #     pub = rospy.Publisher('joint_states', JointState, queue_size=10)
-    #     rospy.init_node("state_joints")
-    #     # rate = rospy.Rate(1000000) # 10hz
-    #     rate = rospy.Rate(10) # 10hz   
-    #     joints_states = JointState()
-    #     joints_states.header = Header()
-    #     joints_states.header.stamp = rospy.Time.now()
-    #     joints_states.name = ['joint_1', 'joint_2', 'joint_3','joint_4', 'joint_5', 'joint_6', 'joint_7','joint_8', 'joint_9', 'joint_10', 'joint_11', 'joint_12', 'joint_13','joint_14', 'joint_15', 'joint_16', 'joint_17','joint_18', 'joint_19', 'joint_20', 'joint_21']
-        
-    #     joint_position=read_positions()
-        
-    #     for i in range(0,20):
-    #         joint_position_state[i]=convertValue2Radian(joint_position[i])
-
-
-    #     joints_states.position = joint_position_state
-    #     joints_states.velocity = []
-    #     joints_states.effort = []
-    #     pub.publish(joints_states)
-        # rate.sleep()   
-
     while not rospy.is_shutdown():
+        
+        joint_position_state=[0,0,0,0,0,0,0,0]
 
-        # rospy.Subscriber('/joint_states', JointState, callback)
+        pub = rospy.Publisher('joint_states', JointState, queue_size=10)
+        rospy.init_node("state_joints",anonymous=True)
+        # rate = rospy.Rate(1000000) # 10hz
+        rate = rospy.Rate(10) # 10hz   
+        joints_states = JointState()
+        joints_states.header = Header()
+        joints_states.header.stamp = rospy.Time.now()
+        joints_states.name = ['joint_1', 'joint_2', 'joint_3','joint_4', 'joint_5', 'joint_6', 'joint_7','joint_8']
+        
+        joint_position=read_positions()
+        
+        for i in range(0,20):
+            joint_position_state[i]=convertValue2Radian(joint_position[i])
 
-        # joint_current_position=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-        # joint_current_position=read_positions()
-        # print 'angle'
-        # for i in range(0,21):
-        #     print i+1, joint_current_position[i]
-        #     print joint_current_position[i]
+        joints_states.position = joint_position
+        joints_states.velocity = []
+        joints_states.effort = []
+        pub.publish(joints_states)
+        rate.sleep()   
 
-        rate = rospy.Rate(10) # 10hz
-        rospy.spin()
+    # while not rospy.is_shutdown():
 
+    #     # rospy.Subscriber('/joint_states', JointState, callback)
 
+    #     # joint_current_position=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    #     # joint_current_position=read_positions()
+    #     # print 'angle'
+    #     # for i in range(0,21):
+    #     #     print i+1, joint_current_position[i]
+    #     #     print joint_current_position[i]
 
-
+    #     rate = rospy.Rate(10) # 10hz
+    #     rospy.spin()
 
 
 
