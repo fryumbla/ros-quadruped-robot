@@ -126,8 +126,8 @@ def comunication1():
 
 
 
-def torque(portHandler, order):
-    for i in DXL_ID1:
+def torque(DXL_ID,portHandler, order):
+    for i in DXL_ID:
         dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, order)
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
@@ -237,8 +237,8 @@ def main():
     comunication0()
     comunication1()
     
-    torque(portHandler0,1)
-    torque(portHandler1,1)
+    torque(DXL_ID0,portHandler0,1)
+    torque(DXL_ID1,portHandler1,1)
     
     # ini_position()
     # torque(0)
