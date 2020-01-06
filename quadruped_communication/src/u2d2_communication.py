@@ -29,6 +29,7 @@ from dynamixel_sdk import *                    # Uses Dynamixel SDK library
 
 # Control table address
 #READ AND WRITE
+ADDR_PRO_ACCELERATION_LIMIT = 40
 ADDR_PRO_VELOCITY_LIMIT     = 44
 ADDR_PRO_TORQUE_ENABLE      = 64               # Control table address is different in Dynamixel model
 ADDR_PRO_LED                = 65
@@ -37,6 +38,8 @@ ADDR_PRO_POSITION_I_GAIN    = 82
 ADDR_PRO_POSITION_P_GAIN    = 84
 
 ADDR_PRO_GOAL_VELOCITY      = 104
+ADDR_PRO_PROFILE_ACCELERATION = 108
+ADDR_PRO_PROFILE_VELOCITY   = 112
 ADDR_PRO_GOAL_POSITION      = 116
 
 #ONLY READ
@@ -139,6 +142,63 @@ def torque(DXL_ID,portHandler, order):
             else:
                 print("Torque of Motor ",i," is off")
 
+def pid_gain_position_loop:
+    # set_P_Gain = 500   
+    # set_I_Gain = 100     
+    # set_D_Gain = 4700 
+    set_P_Gain = 2000
+    set_I_Gain = 10   
+    set_D_Gain = 10
+    for i in DXL_ID0:
+        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler0, i, ADDR_PRO_POSITION_P_GAIN, set_P_Gain)
+        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler0, i, ADDR_PRO_POSITION_I_GAIN, set_I_Gain)
+        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler0, i, ADDR_PRO_POSITION_D_GAIN, set_D_Gain)
+        if dxl_comm_result != COMM_SUCCESS:
+            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+        elif dxl_error != 0:
+            print("%s" % packetHandler.getRxPacketError(dxl_error))
+        else:
+            print("Dynamixel: ",i," has been successfully PID configuration")
+    for i in DXL_ID1:
+        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler1, i, ADDR_PRO_POSITION_P_GAIN, set_P_Gain)
+        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler1, i, ADDR_PRO_POSITION_I_GAIN, set_I_Gain)
+        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler1, i, ADDR_PRO_POSITION_D_GAIN, set_D_Gain)
+        if dxl_comm_result != COMM_SUCCESS:
+            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+        elif dxl_error != 0:
+            print("%s" % packetHandler.getRxPacketError(dxl_error))
+        else:
+            print("Dynamixel: ",i," has been successfully PID configuration")
+
+def pid_gain_position_loop:
+    set_A_l = 80
+    set_V_l = 80
+
+    set_A_PRFL = 10
+    set_V_PRFL = 10
+    for i in DXL_ID0:
+        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, DXL1_ID, ADDR_PRO_VELOCITY_LIMIT, int(set_V_l))
+        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, DXL1_ID, ADDR_PRO_ACCELERATION_LIMIT, int(set_A_l))
+        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, DXL1_ID, ADDR_PRO_PROFILE_ACCELERATION, int(set_A_PRFL))
+        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, DXL1_ID, ADDR_PRO_PROFILE_VELOCITY, int(set_V_PRFL))    
+        if dxl_comm_result != COMM_SUCCESS:
+            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+        elif dxl_error != 0:
+            print("%s" % packetHandler.getRxPacketError(dxl_error))
+        else:
+            print("Dynamixel: ",i," has been successfully velocity and acceleration configuration")
+    for i in DXL_ID1:
+        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, DXL1_ID, ADDR_PRO_VELOCITY_LIMIT, int(set_V_l))
+        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, DXL1_ID, ADDR_PRO_ACCELERATION_LIMIT, int(set_A_l))
+        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, DXL1_ID, ADDR_PRO_PROFILE_ACCELERATION, int(set_A_PRFL))
+        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, DXL1_ID, ADDR_PRO_PROFILE_VELOCITY, int(set_V_PRFL))
+        if dxl_comm_result != COMM_SUCCESS:
+            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+        elif dxl_error != 0:
+            print("%s" % packetHandler.getRxPacketError(dxl_error))
+        else:
+            print("Dynamixel: ",i," has been successfully velocity and acceleration configuration")
+
 def ini_position():
     for i in DXL_ID:
         dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, i, ADDR_PRO_GOAL_POSITION, 512)
@@ -148,17 +208,8 @@ def ini_position():
             print("%s" % packetHandler.getRxPacketError(dxl_error))
 
 def read_positions():
-        # Read present position
-    # joint_position=[0,0,0,0,0,0,0,0]
-    # for i in DXL_ID1:
-    #     dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, i, ADDR_PRO_PRESENT_POSITION)
-    #     if dxl_comm_result != COMM_SUCCESS:
-    #         print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-    #     elif dxl_error != 0:
-    #         print("%s" % packetHandler.getRxPacketError(dxl_error))
-    #     joint_position[i-1]=dxl_present_position
-
-    ########################################## read position ###################################
+    # Read present position
+    joint_position=[0,0,0,0,0,0,0,0]
     # Read Dynamixel#1 present position
     dxl1_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler0, 1, ADDR_PRO_PRESENT_POSITION)
     # Read Dynamixel#2 present position
@@ -208,47 +259,6 @@ def read_positions():
 
     return joint_position
 
-def read_tempeture():
-    # Read present temperature
-    temperature=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    for i in DXL_ID:
-        dxl_present_temperature, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, i, ADDR_PRO_PRESENT_TEMPERATURE)
-        if dxl_comm_result != COMM_SUCCESS:
-            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-        elif dxl_error != 0:
-            print("%s" % packetHandler.getRxPacketError(dxl_error))
-        temperature[i-1]=dxl_present_temperature
-    return temperature
-    
-
-def convertRadian2Value(radian):
-    value = 0
-    zero_position = (1023 + 0)/2
-    # 1.570796327 pi  the angle in the dynamixel motor is 0 to 300 degree 150 degree represent 2.61799 radians
-    if (radian > 0):
-        value = (int)(radian * (1023 - zero_position) / 2.61799) + zero_position
-    elif (radian < 0):
-        value = (int)(-radian * (0 - zero_position) / 2.61799) + zero_position
-    else:
-        value = zero_position
-
-    return value
-
-
-def convertValue2Radian(value):
-
-    radian = 0.0
-    zero_position = (1023 + 0)/2
-
-    if (value > zero_position):
-        radian = (float)(value - zero_position) * 1.5708 / (float)(1023 - zero_position)
-    elif (value < zero_position):
-        radian = (float)(value - zero_position) * 0.1 / (float)(0 - zero_position)
-    return radian
-
-
-
-
 def callback(data):
       
     for i in DXL_ID:     
@@ -288,35 +298,14 @@ def main():
     # torque(DXL_ID1,portHandler1,1)
     
     # ini_position()
-    # torque(0)
-    
-    # rospy.init_node('joint_publisher',anonymous=True)
 
-    # joint_pub = rospy.Publisher('joint_states',JointState,queue_size=1)
-    # joint_instance = JointState()
-    # joint_instance.name.append("front_left_joint1")
-    # joint_instance.name.append("front_left_joint2")
-    # joint_instance.name.append("front_right_joint1")
-    # joint_instance.name.append("front_right_joint2")
-    # joint_instance.name.append("back_left_joint1")
-    # joint_instance.name.append("back_left_joint2")
-    # joint_instance.name.append("back_right_joint1")
-    # joint_instance.name.append("back_right_joint2")
-    # joint_position.append(0.0)
-    # joint_position.append(0.0)
-    # joint_position.append(0.0)
-    # joint_position.append(0.0)
-    # joint_position.append(0.0)
-    # joint_position.append(0.0)
-    # joint_position.append(0.0)
-    # joint_position.append(0.0)
            
     while not rospy.is_shutdown():
         
         joint_position_state=[0,0,0,0,0,0,0,0]
 
+        rospy.init_node("state_joints")
         pub = rospy.Publisher('joint_states', JointState, queue_size=10)
-        rospy.init_node("state_joints",anonymous=True)
         # rate = rospy.Rate(1000000) # 10hz
         rate = rospy.Rate(10) # 10hz   
         joints_states = JointState()
@@ -355,7 +344,8 @@ if __name__ == '__main__':
     try:
         main()
     except rospy.ROSInterruptException:
-        portHandler.closePort()
+        portHandler0.closePort()
+        portHandler1.closePort()
         pass
     
 
