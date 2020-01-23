@@ -5,6 +5,6 @@
 <!-- 
   <param name="dynamixel_info"          value="$(find u2d2_controller)/config/joint_config.yaml"/> -->
 
-  <node name="quadruped_communication" pkg="quadruped_comunication" type="u2d2_communication.py" output="screen"/>
+  <node name="quadruped_communication" pkg="quadruped_communication" type="u2d2_communication.py" output="screen"/>
 
 </launch>

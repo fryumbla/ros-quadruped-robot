@@ -170,7 +170,7 @@ def pid_gain_position_loop():
         else:
             print("Dynamixel: ",i," has been successfully PID configuration")
 
-def pid_gain_velocity_loop():
+def pid_gain_position_loop():
     set_A_l = 80
     set_V_l = 80
 
@@ -251,53 +251,65 @@ def read_positions():
     joint_position[5] = theta6*3.1415/180.0
     joint_position[6] = theta7*3.1415/180.0
     joint_position[7] = theta8*3.1415/180.0
-      
+    
+    # dxl1_goal_position = int(round((theta1+45.0) * (120.0/28.0) * (4095.0/360.0)))
+
+    theta1r = joint_position[0]*180/3.1416
+    theta2r = joint_position[1]*180/3.1416
+    theta3r = joint_position[2]*180/3.1416
+    theta4r = joint_position[3]*180/3.1416
+    theta5r = joint_position[4]*180/3.1416
+    theta6r = joint_position[5]*180/3.1416
+    theta7r = joint_position[6]*180/3.1416
+    theta8r = joint_position[7]*180/3.1416
+    
+
+    dxl1_goal_position = 20475.0 + offset1-((theta1r+90.0)/((15.0/120.0)*(360.0/4095.0)))
+    dxl2_goal_position = 16380.0 + offset2-((theta2r)/((15.0/120.0)*(360.0/4095.0)))
+    dxl3_goal_position = ((theta3r+90)/((15.0/120.0)*(360.0/4095.0)))+offset3
+    dxl4_goal_position = ((theta4r+45)/((15.0/120.0)*(360.0/4095.0)))+offset4
+    dxl5_goal_position = 20475.0 + offset5-((theta5r+90.0)/((15.0/120.0)*(360.0/4095.0)))
+    dxl6_goal_position = 16380.0 + offset6-((theta6r)/((15.0/120.0)*(360.0/4095.0)))
+    dxl7_goal_position = ((theta7r+90)/((15.0/120.0)*(360.0/4095.0)))+offset7
+    dxl8_goal_position = ((theta8r+45)/((15.0/120.0)*(360.0/4095.0)))+offset8
+
+    print("[1]%.2f\t[2]%.2f\t[3]%.2f\t[4]%.2f\t[5]%.2f\t[6]%.2f\t[7]%.2f\t[8]%.2f " % (dxl1_goal_position,dxl2_goal_position,dxl3_goal_position,dxl4_goal_position,dxl5_goal_position,dxl6_goal_position,dxl7_goal_position,dxl8_goal_position))
+    print()
+    
     return joint_position
 
 def callback(data):
 
-    #1 degree ~ 90
-    offset1 = -410
-    offset2 = -80
-    offset3 = 167
-    offset4 = -300
-    offset5 = 0
-    offset6 = -300
-    offset7 = -168
-    offset8 = -120
-
-    theta1 = data.position[1]*180/3.1416
-    theta2 = data.position[5]*180/3.1416
+    theta1 = data.position[0]*180/3.1416
+    theta2 = data.position[0]*180/3.1416
     theta3 = data.position[0]*180/3.1416
-    theta4 = data.position[4]*180/3.1416
-    theta5 = data.position[2]*180/3.1416
-    theta6 = data.position[6]*180/3.1416
-    theta7 = data.position[3]*180/3.1416
-    theta8 = data.position[7]*180/3.1416
-    
-    print("[1]%.2f\t[2]%.2f\t[3]%.2f\t[4]%.2f\t[5]%.2f\t[6]%.2f\t[7]%.2f\t[8]%.2f " % (theta1,theta2,theta3,theta4,theta5,theta6,theta7,theta8))
+    theta4 = data.position[0]*180/3.1416
+    theta5 = data.position[0]*180/3.1416
+    theta6 = data.position[0]*180/3.1416
+    theta7 = data.position[0]*180/3.1416
+    theta8 = data.position[0]*180/3.1416
     
 
-    dxl1_goal_position = int(20475.0 + offset1-((theta1+90.0)/((15.0/120.0)*(360.0/4095.0))))
-    dxl2_goal_position = int(16380.0 + offset2-((theta2)/((15.0/120.0)*(360.0/4095.0))))
-    dxl3_goal_position = int(((theta3+90)/((15.0/120.0)*(360.0/4095.0)))+offset3)
-    dxl4_goal_position = int(((theta4+45)/((15.0/120.0)*(360.0/4095.0)))+offset4)
-    dxl5_goal_position = int(20475.0 + offset5-((theta5+90.0)/((15.0/120.0)*(360.0/4095.0))))
-    dxl6_goal_position = int(16380.0 + offset6-((theta6)/((15.0/120.0)*(360.0/4095.0))))
-    dxl7_goal_position = int(((theta7+90)/((15.0/120.0)*(360.0/4095.0)))+offset7)
-    dxl8_goal_position = int(((theta8+45)/((15.0/120.0)*(360.0/4095.0)))+offset8)
+    dxl1_goal_position = 20475.0 + offset1-((theta1+90.0)/((15.0/120.0)*(360.0/4095.0)))
+    dxl2_goal_position = 16380.0 + offset2-((theta2)/((15.0/120.0)*(360.0/4095.0)))
+    dxl3_goal_position = ((theta3+90)/((15.0/120.0)*(360.0/4095.0)))+offset3
+    dxl4_goal_position = ((theta4+45)/((15.0/120.0)*(360.0/4095.0)))+offset4
+    dxl5_goal_position = 20475.0 + offset5-((theta5+90.0)/((15.0/120.0)*(360.0/4095.0)))
+    dxl6_goal_position = 16380.0 + offset6-((theta6)/((15.0/120.0)*(360.0/4095.0)))
+    dxl7_goal_position = ((theta7+90)/((15.0/120.0)*(360.0/4095.0)))+offset7
+    dxl8_goal_position = ((theta8+45)/((15.0/120.0)*(360.0/4095.0)))+offset8
     
     print("[1]%.2f\t[2]%.2f\t[3]%.2f\t[4]%.2f\t[5]%.2f\t[6]%.2f\t[7]%.2f\t[8]%.2f " % (dxl1_goal_position,dxl2_goal_position,dxl3_goal_position,dxl4_goal_position,dxl5_goal_position,dxl6_goal_position,dxl7_goal_position,dxl8_goal_position))
     print()
 
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, 1, ADDR_PRO_GOAL_POSITION, dxl1_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, 2, ADDR_PRO_GOAL_POSITION, dxl2_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 3, ADDR_PRO_GOAL_POSITION, dxl3_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 4, ADDR_PRO_GOAL_POSITION, dxl4_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, 5, ADDR_PRO_GOAL_POSITION, dxl5_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, 6, ADDR_PRO_GOAL_POSITION, dxl6_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 7, ADDR_PRO_GOAL_POSITION, dxl7_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 8, ADDR_PRO_GOAL_POSITION, dxl8_goal_position)
+    # dxl1_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler0, 1, dxl1_goal_position)
+    # dxl2_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler0, 2, dxl2_goal_position)
+    # dxl3_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, 3, dxl3_goal_position)
+    # dxl4_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, 4, dxl4_goal_position)
+    # dxl5_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler0, 5, dxl5_goal_position)
+    # dxl6_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler0, 6, dxl6_goal_position)
+    # dxl7_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, 7, dxl7_goal_position)
+    # dxl8_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, 8, dxl8_goal_position)
 
       
     # for i in DXL_ID:     
@@ -326,8 +338,10 @@ def main():
 
 
     rospy.init_node("communication")
+
     comunication0()
     comunication1()
+    
     torque(DXL_ID0,portHandler0,1)
     torque(DXL_ID1,portHandler1,1)
     # while not rospy.is_shutdown():
@@ -336,38 +350,38 @@ def main():
  
     
            
-    # while not rospy.is_shutdown():
-        
-    #     joint_position_state=[0,0,0,0,0,0,0,0]
-
-    #     # rospy.init_node("state_joints")
-    #     pub = rospy.Publisher('joint_states', JointState, queue_size=10)
-    #     # rate = rospy.Rate(1000000) # 10hz
-    #     rate = rospy.Rate(10) # 10hz   
-    #     joints_states = JointState()
-    #     joints_states.header = Header()
-    #     joints_states.header.stamp = rospy.Time.now()
-    #     joints_states.name = ['front_right_joint1', 'front_right_joint2', 'front_left_joint1','front_left_joint2', 'back_left_joint1', 'back_left_joint2', 'back_right_joint1','back_right_joint2']
-    #     joints_states.position = read_positions()
-    #     joints_states.velocity = []
-    #     joints_states.effort = []
-    #     pub.publish(joints_states)
-    #     rate.sleep()   
-
-
     while not rospy.is_shutdown():
+        
+        joint_position_state=[0,0,0,0,0,0,0,0]
 
-        rospy.Subscriber('/joint_states', JointState, callback)
+        # rospy.init_node("state_joints")
+        pub = rospy.Publisher('joint_states', JointState, queue_size=10)
+        # rate = rospy.Rate(1000000) # 10hz
+        rate = rospy.Rate(10) # 10hz   
+        joints_states = JointState()
+        joints_states.header = Header()
+        joints_states.header.stamp = rospy.Time.now()
+        joints_states.name = ['front_right_joint1', 'front_right_joint2', 'front_left_joint1','front_left_joint2', 'back_left_joint1', 'back_left_joint2', 'back_right_joint1','back_right_joint2']
+        joints_states.position = read_positions()
+        joints_states.velocity = []
+        joints_states.effort = []
+        pub.publish(joints_states)
+        rate.sleep()   
 
-        # joint_current_position=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-        # joint_current_position=read_positions()
-        # print 'angle'
-        # for i in range(0,21):
-        #     print i+1, joint_current_position[i]
-        #     print joint_current_position[i]
 
-        rate = rospy.Rate(10) # 10hz
-        rospy.spin()
+    # while not rospy.is_shutdown():
+
+        # rospy.Subscriber('/joint_states', JointState, callback)
+
+    #     # joint_current_position=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    #     # joint_current_position=read_positions()
+    #     # print 'angle'
+    #     # for i in range(0,21):
+    #     #     print i+1, joint_current_position[i]
+    #     #     print joint_current_position[i]
+
+    #     rate = rospy.Rate(10) # 10hz
+    #     rospy.spin()
 
 
 
