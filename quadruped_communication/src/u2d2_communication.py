@@ -199,14 +199,6 @@ def pid_gain_position_loop:
         else:
             print("Dynamixel: ",i," has been successfully velocity and acceleration configuration")
 
-def ini_position():
-    for i in DXL_ID:
-        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, i, ADDR_PRO_GOAL_POSITION, 512)
-        if dxl_comm_result != COMM_SUCCESS:
-            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-        elif dxl_error != 0:
-            print("%s" % packetHandler.getRxPacketError(dxl_error))
-
 def read_positions():
     # Read present position
     joint_position=[0,0,0,0,0,0,0,0]
@@ -263,10 +255,12 @@ def callback(data):
       
     for i in DXL_ID:     
         dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, i, ADDR_PRO_GOAL_POSITION, convertRadian2Value(data.position[i-1]))
+        # dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, DXL1_ID, ADDR_PRO_GOAL_POSITION, goal1[index])
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
         elif dxl_error != 0:
             print("%s" % packetHandler.getRxPacketError(dxl_error))
+
 
     joint_position_state=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     pub = rospy.Publisher('current_joint_states', JointState, queue_size=10)
@@ -294,35 +288,40 @@ def main():
     comunication0()
     comunication1()
     
-    # torque(DXL_ID0,portHandler0,1)
-    # torque(DXL_ID1,portHandler1,1)
+    torque(DXL_ID0,portHandler0,1)
+    torque(DXL_ID1,portHandler1,1)
     
-    # ini_position()
-
            
-    while not rospy.is_shutdown():
+    # while not rospy.is_shutdown():
         
-        joint_position_state=[0,0,0,0,0,0,0,0]
+    #     joint_position_state=[0,0,0,0,0,0,0,0]
 
-        rospy.init_node("state_joints")
-        pub = rospy.Publisher('joint_states', JointState, queue_size=10)
-        # rate = rospy.Rate(1000000) # 10hz
-        rate = rospy.Rate(10) # 10hz   
-        joints_states = JointState()
-        joints_states.header = Header()
-        joints_states.header.stamp = rospy.Time.now()
-        joints_states.name = ['joint_1', 'joint_2', 'joint_3','joint_4', 'joint_5', 'joint_6', 'joint_7','joint_8']
+    #     rospy.init_node("state_joints")
+    #     pub = rospy.Publisher('joint_states', JointState, queue_size=10)
+    #     # rate = rospy.Rate(1000000) # 10hz
+    #     rate = rospy.Rate(10) # 10hz   
+    #     joints_states = JointState()
+    #     joints_states.header = Header()
+    #     joints_states.header.stamp = rospy.Time.now()
+    #     joints_states.name = ['joint_1', 'joint_2', 'joint_3','joint_4', 'joint_5', 'joint_6', 'joint_7','joint_8']
         
-        joint_position=read_positions()
+    #     joint_position=read_positions()
         
-        for i in range(0,20):
-            joint_position_state[i]=convertValue2Radian(joint_position[i])
+    #     for i in range(0,20):
+    #         joint_position_state[i]=convertValue2Radian(joint_position[i])
 
-        joints_states.position = joint_position
-        joints_states.velocity = []
-        joints_states.effort = []
-        pub.publish(joints_states)
-        rate.sleep()   
+    #     joints_states.position = joint_position
+    #     joints_states.velocity = []
+    #     joints_states.effort = []
+    #     pub.publish(joints_states)
+    #     rate.sleep()   
+
+
+
+
+
+
+
 
     # while not rospy.is_shutdown():
 
