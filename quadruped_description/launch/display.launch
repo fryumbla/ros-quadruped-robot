@@ -16,6 +16,6 @@
 
 	<!-- Launch visualization in rviz -->
 	<!-- <node name="rviz" pkg="rviz" type="rviz"/> -->
-	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find quadruped_description)/config/configuration.rviz" required="true" />
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find quadruped_description)/launch/robocare.rviz" required="true" />
 
 </launch>

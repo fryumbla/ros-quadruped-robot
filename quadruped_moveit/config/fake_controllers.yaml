@@ -15,3 +15,13 @@ controller_list:
     joints:
       - back_right_joint1
       - back_right_joint2
+  - name: fake_robot_controller
+    joints:
+      - back_left_joint1
+      - back_left_joint2
+      - back_right_joint1
+      - back_right_joint2
+      - front_left_joint1
+      - front_left_joint2
+      - front_right_joint1
+      - front_right_joint2
