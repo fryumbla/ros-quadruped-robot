@@ -256,14 +256,16 @@ def read_positions():
 
 def callback(data):
 
-    #1 degree ~ 90
-    offset1 = -410
+    #1 degree ~ 90 /i did repair the motor 1 and we change for motor 1 and 7 position
+    # offset1 = -410
+    offset1 = 150
     offset2 = -80
     offset3 = 167
     offset4 = -300
     offset5 = 0
     offset6 = -300
-    offset7 = -168
+    # offset7 = -168
+    offset7 = -350
     offset8 = -120
 
     theta1 = data.position[1]*180/3.1416
@@ -328,8 +330,8 @@ def main():
     rospy.init_node("communication")
     comunication0()
     comunication1()
-    torque(DXL_ID0,portHandler0,1)
-    torque(DXL_ID1,portHandler1,1)
+    torque(DXL_ID0,portHandler0,0)
+    torque(DXL_ID1,portHandler1,0)
     # while not rospy.is_shutdown():
     #     rospy.Subscriber('/joint_states', JointState, callback)
     #     # read_positions()
@@ -358,7 +360,7 @@ def main():
     while not rospy.is_shutdown():
 
         rospy.Subscriber('/joint_states', JointState, callback)
-
+        # read_positions()
         # joint_current_position=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
         # joint_current_position=read_positions()
         # print 'angle'
