@@ -13,17 +13,15 @@
         <link name="front_right_u" />
         <link name="front_right_d" />
         <link name="body" />
-        <joint name="front_left_joint1" />
-        <joint name="front_left_joint2" />
-        <chain base_link="body" tip_link="front_right_d" />
+        <joint name="front_right_joint1" />
+        <joint name="front_right_joint2" />
     </group>
     <group name="front_left_leg">
         <link name="front_left_u" />
         <link name="front_left_d" />
         <link name="body" />
-        <joint name="front_right_joint1" />
-        <joint name="front_right_joint2" />
-        <chain base_link="body" tip_link="front_left_d" />
+        <joint name="front_left_joint1" />
+        <joint name="front_left_joint2" />
     </group>
     <group name="back_left_leg">
         <link name="body" />
@@ -31,7 +29,6 @@
         <link name="back_left_d" />
         <joint name="back_left_joint1" />
         <joint name="back_left_joint2" />
-        <chain base_link="body" tip_link="back_left_d" />
     </group>
     <group name="back_right_leg">
         <link name="body" />
@@ -39,7 +36,6 @@
         <link name="back_right_d" />
         <joint name="back_right_joint1" />
         <joint name="back_right_joint2" />
-        <chain base_link="body" tip_link="back_right_d" />
     </group>
     <group name="robot">
         <group name="front_right_leg" />
@@ -57,6 +53,26 @@
         <joint name="front_left_joint2" value="0" />
         <joint name="front_right_joint1" value="0" />
         <joint name="front_right_joint2" value="0" />
+    </group_state>
+    <group_state name="Up1" group="robot">
+        <joint name="back_left_joint1" value="-1" />
+        <joint name="back_left_joint2" value="2.4" />
+        <joint name="back_right_joint1" value="-1" />
+        <joint name="back_right_joint2" value="2.4" />
+        <joint name="front_left_joint1" value="-1" />
+        <joint name="front_left_joint2" value="2.4" />
+        <joint name="front_right_joint1" value="-1" />
+        <joint name="front_right_joint2" value="2.4" />
+    </group_state>
+    <group_state name="Up2" group="robot">
+        <joint name="back_left_joint1" value="0.7854" />
+        <joint name="back_left_joint2" value="0.7854" />
+        <joint name="back_right_joint1" value="0.7854" />
+        <joint name="back_right_joint2" value="0.7854" />
+        <joint name="front_left_joint1" value="0.7854" />
+        <joint name="front_left_joint2" value="0.7854" />
+        <joint name="front_right_joint1" value="0.7854" />
+        <joint name="front_right_joint2" value="0.7854" />
     </group_state>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="back_left_d" link2="back_left_u" reason="Adjacent" />

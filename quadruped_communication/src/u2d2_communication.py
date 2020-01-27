@@ -57,10 +57,8 @@ DXL_ID                      = [1,2,3,4,5,6,7,8]
 # BAUDRATE                    = 1000000             # Dynamixel default baudrate : 57600
 BAUDRATE                    = 57600
 
-
 DEVICENAME0                 = '/dev/ttyUSB0'    # Check which port is being used on your controller
 DEVICENAME1                 = '/dev/ttyUSB1'    # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
-
 
 # Initialize PortHandler instance
 # Set the port path
@@ -332,12 +330,10 @@ def main():
     comunication1()
     torque(DXL_ID0,portHandler0,0)
     torque(DXL_ID1,portHandler1,0)
+    
     # while not rospy.is_shutdown():
     #     rospy.Subscriber('/joint_states', JointState, callback)
-    #     # read_positions()
- 
-    
-           
+            
     # while not rospy.is_shutdown():
         
     #     joint_position_state=[0,0,0,0,0,0,0,0]
@@ -360,14 +356,6 @@ def main():
     while not rospy.is_shutdown():
 
         rospy.Subscriber('/joint_states', JointState, callback)
-        # read_positions()
-        # joint_current_position=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-        # joint_current_position=read_positions()
-        # print 'angle'
-        # for i in range(0,21):
-        #     print i+1, joint_current_position[i]
-        #     print joint_current_position[i]
-
         rate = rospy.Rate(10) # 10hz
         rospy.spin()
 

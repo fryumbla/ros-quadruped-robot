@@ -29,15 +29,15 @@ controller_list:
     default: True
     type: FollowJointTrajectory
     joints:
-      - front_left_joint1
-      - front_left_joint2
+      - front_right_joint1
+      - front_right_joint2
   - name: front_left_leg_controller
     action_ns: follow_joint_trajectory
     default: True
     type: FollowJointTrajectory
     joints:
-      - front_right_joint1
-      - front_right_joint2
+      - front_left_joint1
+      - front_left_joint2
   - name: back_left_leg_controller
     action_ns: follow_joint_trajectory
     default: True

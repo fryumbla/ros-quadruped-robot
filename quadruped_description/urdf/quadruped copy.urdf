@@ -164,6 +164,29 @@
       </geometry>
     </collision>
   </link>
+  <joint name="front_left_foot" type="fixed">
+    <origin rpy="0 0 0" xyz="0.41 0 0"/>
+    <parent link="front_left_d"/>
+    <child link="front_left_foot"/>
+  </joint>
+  <link name="front_left_foot">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-06" ixy="0.0" ixz="0.0" iyy="1.0e-06" iyz="0.0" izz="1.0e-06"/>
+    </inertial>
+  </link>
+
+
 
   <link name="front_right_d">
     <inertial>
@@ -189,7 +212,28 @@
       </geometry>
     </collision>
   </link>
-  
+  <joint name="front_right_foot" type="fixed">
+    <origin rpy="0 0 0" xyz="0.41 0 0"/>
+    <parent link="front_right_d"/>
+    <child link="front_right_foot"/>
+  </joint>
+  <link name="front_right_foot">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-06" ixy="0.0" ixz="0.0" iyy="1.0e-06" iyz="0.0" izz="1.0e-06"/>
+    </inertial>
+  </link>
+
   <link name="back_left_d">
     <inertial>
       <mass value="1" />
@@ -214,7 +258,28 @@
       </geometry>
     </collision>
   </link>
-  
+  <joint name="back_left_foot" type="fixed">
+    <origin rpy="0 0 0" xyz="0.41 0 0"/>
+    <parent link="back_left_d"/>
+    <child link="back_left_foot"/>
+  </joint>
+  <link name="back_left_foot">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-06" ixy="0.0" ixz="0.0" iyy="1.0e-06" iyz="0.0" izz="1.0e-06"/>
+    </inertial>
+  </link>
+
   <link name="back_right_d">
     <inertial>
       <mass value="1" />
@@ -239,7 +304,28 @@
       </geometry>
     </collision>
   </link>
- 
+  <joint name="back_right_foot" type="fixed">
+    <origin rpy="0 0 0" xyz="0.41 0 0"/>
+    <parent link="back_right_d"/>
+    <child link="back_right_foot"/>
+  </joint>
+  <link name="back_right_foot">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-06" ixy="0.0" ixz="0.0" iyy="1.0e-06" iyz="0.0" izz="1.0e-06"/>
+    </inertial>
+  </link>
+
   <joint name="front_left_joint1" type="revolute">
     <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
     <parent link="body"/>
@@ -304,6 +390,70 @@
     <axis xyz="0 1 0" />
   </joint>
 
+  <!-- <joint name="front_right_joint1" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="body"/>
+    <child link="front_left_u"/>
+    <origin xyz="0.11 0.05 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="front_left_joint1" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="body"/>
+    <child link="front_right_u"/>
+    <origin xyz="0.11 -0.05 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="back_left_joint1" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="body"/>
+    <child link="back_left_u"/>
+    <origin xyz="-0.11 0.05 0" rpy="0 0 3.14" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="back_right_joint1" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="body"/>
+    <child link="back_right_u"/>
+    <origin xyz="-0.11 -0.05 0" rpy="0 0 3.14" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="front_right_joint2" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="front_left_u"/>
+    <child link="front_left_d"/>
+    <origin xyz="0.4 0.005 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="front_left_joint2" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="front_right_u"/>
+    <child link="front_right_d"/>
+    <origin xyz="0.4 -0.005 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="back_left_joint2" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="back_left_u"/>
+    <child link="back_left_d"/>
+    <origin xyz="0.4 -0.005 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <joint name="back_right_joint2" type="revolute">
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <parent link="back_right_u"/>
+    <child link="back_right_d"/>
+    <origin xyz="0.4 0.005 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+  </joint> -->
+
   <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
   <!-- Transmissions for ROS Control -->
 
@@ -320,7 +470,7 @@
   
   <transmission name="tran2">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="front_right_joint2">
+    <joint name="front_left_joint1">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor2">
@@ -331,7 +481,7 @@
 
   <transmission name="tran3">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="front_left_joint1">
+    <joint name="back_left_joint1">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor3">
@@ -342,7 +492,7 @@
 
   <transmission name="tran4">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="front_left_joint2">
+    <joint name="back_right_joint1">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor4">
@@ -353,7 +503,7 @@
 
   <transmission name="tran5">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="back_left_joint1">
+    <joint name="front_right_joint2">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor5">
@@ -364,7 +514,7 @@
 
   <transmission name="tran6">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="back_left_joint2">
+    <joint name="front_left_joint2">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor6">
@@ -375,7 +525,7 @@
 
   <transmission name="tran7">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="back_right_joint1">
+    <joint name="back_left_joint2">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor7">
