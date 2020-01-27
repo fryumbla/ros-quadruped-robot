@@ -30,7 +30,7 @@ def main():
 
 
 
-		pub = rospy.Publisher('joint_goals', JointState, queue_size=10)
+		pub = rospy.Publisher('joint_states', JointState, queue_size=10)
 		# rate = rospy.Rate(1000000) # 10hz
 		joints_states = JointState()
 		joints_states.header = Header()

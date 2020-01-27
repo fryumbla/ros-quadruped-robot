@@ -256,23 +256,32 @@ def callback(data):
 
     #1 degree ~ 90 /i did repair the motor 1 and we change for motor 1 and 7 position
     # offset1 = -410
-    offset1 = 150
+    offset1 = 250
     offset2 = -80
-    offset3 = 167
-    offset4 = -300
+    offset3 = -30
+    offset4 = 10
     offset5 = 0
     offset6 = -300
-    # offset7 = -168
     offset7 = -350
     offset8 = -120
 
-    theta1 = data.position[1]*180/3.1416
-    theta2 = data.position[5]*180/3.1416
-    theta3 = data.position[0]*180/3.1416
-    theta4 = data.position[4]*180/3.1416
-    theta5 = data.position[2]*180/3.1416
-    theta6 = data.position[6]*180/3.1416
-    theta7 = data.position[3]*180/3.1416
+    #esta configuracion es con lo siguiente mensaje joint1 front and backs y despues los dos
+    # theta1 = data.position[1]*180/3.1416
+    # theta2 = data.position[5]*180/3.1416
+    # theta3 = data.position[0]*180/3.1416
+    # theta4 = data.position[4]*180/3.1416
+    # theta5 = data.position[2]*180/3.1416
+    # theta6 = data.position[6]*180/3.1416
+    # theta7 = data.position[3]*180/3.1416
+    # theta8 = data.position[7]*180/3.1416
+
+    theta1 = data.position[0]*180/3.1416
+    theta2 = data.position[1]*180/3.1416
+    theta3 = data.position[2]*180/3.1416
+    theta4 = data.position[3]*180/3.1416
+    theta5 = data.position[4]*180/3.1416
+    theta6 = data.position[5]*180/3.1416
+    theta7 = data.position[6]*180/3.1416
     theta8 = data.position[7]*180/3.1416
     
     print("[1]%.2f\t[2]%.2f\t[3]%.2f\t[4]%.2f\t[5]%.2f\t[6]%.2f\t[7]%.2f\t[8]%.2f " % (theta1,theta2,theta3,theta4,theta5,theta6,theta7,theta8))
@@ -328,8 +337,8 @@ def main():
     rospy.init_node("communication")
     comunication0()
     comunication1()
-    torque(DXL_ID0,portHandler0,0)
-    torque(DXL_ID1,portHandler1,0)
+    torque(DXL_ID0,portHandler0,1)
+    torque(DXL_ID1,portHandler1,1)
     
     # while not rospy.is_shutdown():
     #     rospy.Subscriber('/joint_states', JointState, callback)
@@ -354,7 +363,7 @@ def main():
 
 
     while not rospy.is_shutdown():
-
+        # read_positions()
         rospy.Subscriber('/joint_states', JointState, callback)
         rate = rospy.Rate(10) # 10hz
         rospy.spin()
