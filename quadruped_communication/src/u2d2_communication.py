@@ -57,8 +57,8 @@ DXL_ID                      = [1,2,3,4,5,6,7,8]
 # BAUDRATE                    = 1000000             # Dynamixel default baudrate : 57600
 BAUDRATE                    = 57600
 
-DEVICENAME0                 = '/dev/ttyUSB0'    # Check which port is being used on your controller
-DEVICENAME1                 = '/dev/ttyUSB1'    # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
+DEVICENAME0                 = '/dev/ttyUSB1'    # Check which port is being used on your controller
+DEVICENAME1                 = '/dev/ttyUSB2'    # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
 # Initialize PortHandler instance
 # Set the port path
@@ -256,13 +256,13 @@ def callback(data):
 
     #1 degree ~ 90 /i did repair the motor 1 and we change for motor 1 and 7 position
     # offset1 = -410
-    offset1 = 250
+    offset1 = 50
     offset2 = -80
     offset3 = -30
     offset4 = 10
     offset5 = 0
     offset6 = -300
-    offset7 = -350
+    offset7 = 150
     offset8 = -120
 
     #esta configuracion es con lo siguiente mensaje joint1 front and backs y despues los dos
