@@ -7,7 +7,7 @@
 
 ### 1.1. System Requirements
 
-This package is written an tested on **Ubuntu 16.04 + ROS Kinetic** environment. Dependencies are also for this environment.
+This package is written an tested on **Ubuntu 18.04 + ROS Melodic** environment. Dependencies are also for this environment.
 
 ### 1.2. Dependencies Prerequisites
 
@@ -41,3 +41,12 @@ this create a topic
 
 * `/Foots_Touch`: move to designated pose 
 * `/bolean_foots`: move to designated pose, in straight path.
+
+
+
+quadruped_description gazebo.launch
+
+quadruped_master comunitation_gazebo.py
+
+quadruped_master stand_up.py
+

@@ -1,0 +1,8 @@
+<launch>
+  <arg name="usb_port0"                default="/dev/ttyUSB0"/>
+  <arg name="usb_port1"                default="/dev/ttyUSB1"/>
+  <arg name="dxl_baud_rate"           default="57600"/>
+
+  <node name="quadruped_communication" pkg="quadruped_communication" type="u2d2_communication.py" output="screen"/>
+
+</launch>

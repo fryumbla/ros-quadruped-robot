@@ -57,8 +57,8 @@ DXL_ID                      = [1,2,3,4,5,6,7,8]
 # BAUDRATE                    = 1000000             # Dynamixel default baudrate : 57600
 BAUDRATE                    = 57600
 
-DEVICENAME0                 = '/dev/ttyUSB1'    # Check which port is being used on your controller
-DEVICENAME1                 = '/dev/ttyUSB2'    # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
+DEVICENAME0                 = '/dev/ttyUSB0'    # Check which port is being used on your controller
+DEVICENAME1                 = '/dev/ttyUSB1'    # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
 # Initialize PortHandler instance
 # Set the port path
@@ -364,7 +364,7 @@ def main():
 
     while not rospy.is_shutdown():
         # read_positions()
-        rospy.Subscriber('/joint_states', JointState, callback)
+        rospy.Subscriber('/joint_goals', JointState, callback)
         rate = rospy.Rate(10) # 10hz
         rospy.spin()
 

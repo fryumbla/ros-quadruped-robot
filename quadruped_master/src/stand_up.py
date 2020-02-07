@@ -21,16 +21,21 @@ def main():
 			print("dos")
 			joint_position_state=[-1,2.2,-1,2.2,-1,2.2,-1,2.2]
 		if (number==3):
-			joint_position_state=[0,1.57,0,1.57,0,1.57,0,1.57]
+			#parado
+			joint_position_state=[0.759,1.16937,0.759,1.16937,0.759,1.16937,0.759,1.16937]
 		if (number==4):
-			joint_position_state=[0.5,1,0.5,1,0.5,1,0.5,1]		
+			#derecha alza
+			joint_position_state=[0.4194,1.7198,0.759,1.16937,0.4194,1.7198,0.759,1.16937]		
 		if (number==5):
-			joint_position_state=[-1,0,-1,0,-1,0,-1,0]	
+			# primer paso
+			joint_position_state=[0.7047391,1.009487,0.759,1.16937,0.9484119,1.244768,0.759,1.16937]
+		if (number==6):
+			joint_position_state=[0.759,1.16937,0.4194,1.7198,0.759,1.16937,0.4194,1.7198]	
+		if (number==7):
+			# segundo paso
+			joint_position_state=[0.759,1.16937,0.7047391,1.009487,0.759,1.16937,0.9484119,1.244768]
 					
-
-
-
-		pub = rospy.Publisher('joint_states', JointState, queue_size=10)
+		pub = rospy.Publisher('joint_goals', JointState, queue_size=10)
 		# rate = rospy.Rate(1000000) # 10hz
 		joints_states = JointState()
 		joints_states.header = Header()
