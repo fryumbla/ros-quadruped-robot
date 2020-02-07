@@ -34,6 +34,12 @@ def main():
 		if (number==7):
 			# segundo paso
 			joint_position_state=[0.759,1.16937,0.7047391,1.009487,0.759,1.16937,0.9484119,1.244768]
+		if (number==8):
+			# segundo paso
+			joint_position_state=[0,1.16937,0,1.16937,0,1.16937,0,1.16937]
+		if (number==9):
+			# segundo paso
+			joint_position_state=[-1,0,-1,0,-1,0,-1,0]
 					
 		pub = rospy.Publisher('joint_goals', JointState, queue_size=10)
 		# rate = rospy.Rate(1000000) # 10hz

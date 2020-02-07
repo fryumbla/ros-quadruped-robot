@@ -363,7 +363,7 @@ def main():
 
 
     while not rospy.is_shutdown():
-        # read_positions()
+        read_positions()
         rospy.Subscriber('/joint_goals', JointState, callback)
         rate = rospy.Rate(10) # 10hz
         rospy.spin()
