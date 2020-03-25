@@ -1,0 +1,5 @@
+<launch> 
+
+    <node name="vrep_communication" pkg="quadruped_vrep" type="communication" output="screen"/>
+
+</launch>
