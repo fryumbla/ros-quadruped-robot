@@ -1,0 +1,14 @@
+<launch>
+
+    <include file="$(find quadruped_description)/launch/gazebo.launch"/>
+ 
+    <node name="gazebo_communication" pkg="quadruped_master" type="communication_gazebo.py" output="screen"/>
+
+
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find quadruped_description)/config/configuration.rviz" required="true" />
+
+
+    <node name="motion_goal" pkg="quadruped_master" type="movement.py" output="screen"/>
+
+</launch>

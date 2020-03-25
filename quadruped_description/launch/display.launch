@@ -9,7 +9,7 @@
 
 	<!-- Starting Joint state publisher node which will publish the joint values -->
 	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" >
-		<!-- <remap from="/joint_states" to="/joints_goal" />  -->
+		<!-- <remap from="/joint_states" to="/joints_goals" />  -->
   	</node>
 	  
 	<!-- Starting robot state publish which will publish tf -->

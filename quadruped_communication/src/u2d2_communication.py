@@ -308,16 +308,6 @@ def callback(data):
     dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 7, ADDR_PRO_GOAL_POSITION, dxl7_goal_position)
     dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 8, ADDR_PRO_GOAL_POSITION, dxl8_goal_position)
 
-      
-    # for i in DXL_ID:     
-    #     dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, i, ADDR_PRO_GOAL_POSITION, convertRadian2Value(data.position[i-1]))
-    #     # dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, DXL1_ID, ADDR_PRO_GOAL_POSITION, goal1[index])
-    #     if dxl_comm_result != COMM_SUCCESS:
-    #         print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-    #     elif dxl_error != 0:
-    #         print("%s" % packetHandler.getRxPacketError(dxl_error))
-
-
     # joint_position_state=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     # pub = rospy.Publisher('current_joint_states', JointState, queue_size=10)
     # joints_states = JointState()
@@ -330,9 +320,7 @@ def callback(data):
     # joints_states.effort = []
     # pub.publish(joints_states)
     
-
 def main():
-
 
     rospy.init_node("communication")
     comunication0()
@@ -340,35 +328,11 @@ def main():
     torque(DXL_ID0,portHandler0,1)
     torque(DXL_ID1,portHandler1,1)
     
-    # while not rospy.is_shutdown():
-    #     rospy.Subscriber('/joint_states', JointState, callback)
-            
-    # while not rospy.is_shutdown():
-        
-    #     joint_position_state=[0,0,0,0,0,0,0,0]
-
-    #     # rospy.init_node("state_joints")
-    #     pub = rospy.Publisher('joint_states', JointState, queue_size=10)
-    #     # rate = rospy.Rate(1000000) # 10hz
-    #     rate = rospy.Rate(10) # 10hz   
-    #     joints_states = JointState()
-    #     joints_states.header = Header()
-    #     joints_states.header.stamp = rospy.Time.now()
-    #     joints_states.name = ['front_right_joint1', 'front_right_joint2', 'front_left_joint1','front_left_joint2', 'back_left_joint1', 'back_left_joint2', 'back_right_joint1','back_right_joint2']
-    #     joints_states.position = read_positions()
-    #     joints_states.velocity = []
-    #     joints_states.effort = []
-    #     pub.publish(joints_states)
-    #     rate.sleep()   
-
-
     while not rospy.is_shutdown():
         read_positions()
         rospy.Subscriber('/joint_goals', JointState, callback)
         rate = rospy.Rate(10) # 10hz
         rospy.spin()
-
-
 
 if __name__ == '__main__':
     try:
