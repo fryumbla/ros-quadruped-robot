@@ -6,8 +6,8 @@
   <link name="dummy">
   </link>
 
-  <material name="gray">
-    <color rgba="0.5 0.5 0.5 1.0"/>
+  <material name="black">
+    <color rgba="0 0 0 0.5"/>
   </material>
 
   <joint name="dummy_joint" type="fixed">
@@ -27,7 +27,7 @@
       <geometry>
         <mesh filename="package://quadruped_description/meshes/frame_aluminum_motor_case.stl"/>
       </geometry>
-      <material name="gray"/>
+      <material name="black"/>
     </visual>
     <collision>
       <origin
@@ -52,7 +52,7 @@
       <geometry>
         <mesh filename="package://quadruped_description/meshes/joint_gear_upper_assembly.stl"/>
       </geometry>
-      <material name="gray"/>
+      <material name="black"/>
     </visual>
     <collision>
       <origin
@@ -77,7 +77,7 @@
       <geometry>
         <mesh filename="package://quadruped_description/meshes/joint_gear_upper_assembly.stl"/>
       </geometry>
-      <material name="gray"/>
+      <material name="black"/>
     </visual>
     <collision>
       <origin
@@ -102,7 +102,7 @@
       <geometry>
         <mesh filename="package://quadruped_description/meshes/joint_gear_upper_assembly.stl"/>
       </geometry>
-      <material name="gray"/>
+      <material name="black"/>
     </visual>
     <collision>
       <origin
@@ -127,7 +127,7 @@
       <geometry>
         <mesh filename="package://quadruped_description/meshes/joint_gear_upper_assembly.stl"/>
       </geometry>
-      <material name="gray"/>
+      <material name="black"/>
     </visual>
     <collision>
       <origin
@@ -152,7 +152,7 @@
       <geometry>
         <mesh filename="package://quadruped_description/meshes/Assembly_lower_link_v2.stl"/>
       </geometry>
-      <material name="gray"/>
+      <material name="black"/>
     </visual>
     <collision>
       <origin
@@ -177,7 +177,7 @@
       <geometry>
         <mesh filename="package://quadruped_description/meshes/Assembly_lower_link_v2.stl"/>
       </geometry>
-      <material name="gray"/>
+      <material name="black"/>
     </visual>
     <collision>
       <origin
@@ -202,7 +202,7 @@
       <geometry>
         <mesh filename="package://quadruped_description/meshes/Assembly_lower_link_v2.stl"/>
       </geometry>
-      <material name="gray"/>
+      <material name="black"/>
     </visual>
     <collision>
       <origin
@@ -227,7 +227,7 @@
       <geometry>
         <mesh filename="package://quadruped_description/meshes/Assembly_lower_link_v2.stl"/>
       </geometry>
-      <material name="gray"/>
+      <material name="black"/>
     </visual>
     <collision>
       <origin
