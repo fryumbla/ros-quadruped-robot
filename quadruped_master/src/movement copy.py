@@ -1,68 +1,9 @@
 #!/usr/bin/env python
 
 import rospy
-import math
-import numpy as np
 
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
-
-
-
-
-#Funcion que calcula la cinematica inversa de la pierna del robot, toma como referencia el pie y ubica la cadera
-#Recibe los puntos x, y, z de la ubicacion deseada de la cadera. Tambien los angulos pitch, roll, yaw de la orientacion deseada.
-#Modifica por referencia un vector con el valor de los angulos en grados. Estos angulos toman el eje x del servo como cero
-def IK2Servofoottoboddy(xH,zH,pitchH,yawH):
-
-    # std::cout<<endl << "PosHip: X= "<<xH << "  Y= "<<yH << "  Z= "<<zH <<endl
-
-    #L6 = LegLenghts[1]
-    L0 = 0.11
-    L1 = 0.4
-    L2 = 0.4
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    #Los angulos obtenidos se almacenan en el vector de salida
-    ang = [0,0,0,0,0]
-    # ang[0]= hip_yaw
-    ang[0]= hip_roll
-    ang[1]= ((math.pi/2)-hip_pitch)
-    ang[2]= -(math.pi-knee_pitch)
-    ang[3]= ((math.pi/2)-ankle_pitch)
-    ang[4]= ankle_roll
-    print(ang)
-    return ang
-
 
 def main():
 
