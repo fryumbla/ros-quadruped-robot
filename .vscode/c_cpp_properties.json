@@ -1,0 +1,49 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/francisco/robotis_ws/devel/include/**",
+                "/home/francisco/cobots_ws/devel/include/**",
+                "/home/francisco/catkin_ws/devel/include/**",
+                "/opt/ros/melodic/include/**",
+                "/home/francisco/robotis_ws/src/ros-bioloid-gp/bioloid_gp_master/include/**",
+                "/home/francisco/robotis_ws/src/ros-bioloid-gp/bioloid_vrep/include/**",
+                "/home/francisco/catkin_ws/src/cable-connector-recognition/cable_contour/include/**",
+                "/home/francisco/catkin_ws/src/Robot-Vision-System/communication_protocol/include/**",
+                "/home/francisco/robotis_ws/src/ros-bioloid-gp/bioloid_sdk/DynamixelSDK/ros/include/**",
+                "/home/francisco/robotis_ws/src/ros-bioloid-gp/bioloid_sdk/dynamixel-workbench/dynamixel_workbench_controllers/include/**",
+                "/home/francisco/robotis_ws/src/ros-bioloid-gp/bioloid_sdk/dynamixel-workbench/dynamixel_workbench_operators/include/**",
+                "/home/francisco/robotis_ws/src/ros-bioloid-gp/bioloid_sdk/dynamixel-workbench/dynamixel_workbench_single_manager/include/**",
+                "/home/francisco/robotis_ws/src/ros-bioloid-gp/bioloid_sdk/dynamixel-workbench/dynamixel_workbench_single_manager_gui/include/**",
+                "/home/francisco/robotis_ws/src/ros-bioloid-gp/bioloid_sdk/dynamixel-workbench/dynamixel_workbench_toolbox/include/**",
+                "/home/francisco/catkin_ws/src/cable-connector-recognition/image_capture/include/**",
+                "/home/francisco/cobots_ws/src/Indy7-Neuromeka/indy7_description/include/**",
+                "/home/francisco/cobots_ws/src/Indy7-Neuromeka/indy7_gazebo/include/**",
+                "/home/francisco/cobots_ws/src/Indy7-Neuromeka/indy7_master/include/**",
+                "/home/francisco/cobots_ws/src/Indy7-Neuromeka/indy7_vrep/include/**",
+                "/home/francisco/cobots_ws/src/IRB120-ABB/irb120_description/include/**",
+                "/home/francisco/cobots_ws/src/IRB120-ABB/irb120_vrep/include/**",
+                "/home/francisco/catkin_ws/src/cable-connector-recognition/mahir/include/**",
+                "/home/francisco/catkin_ws/src/Robot-Manipulability/manipulability/include/**",
+                "/home/francisco/robotis_ws/src/ros-bioloid-vision/opencv/include/**",
+                "/home/francisco/quadruped_ws/src/ros-quadruped-robot/quadruped_vrep/include/**",
+                "/home/francisco/robotis_ws/src/ros-bioloid-vision/realsense-ros/realsense2_camera/include/**",
+                "/home/francisco/cobots_ws/src/Robotiq-grippers/robotiq_2f_85_description/include/**",
+                "/home/francisco/cobots_ws/src/Robotiq-grippers/robotiq_3f_description/include/**",
+                "/home/francisco/schunk_ws/src/Schunk-LWA-4P/schunk_control/include/**",
+                "/home/francisco/schunk_ws/src/Schunk-LWA-4P/schunk_vrep/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++14"
+        }
+    ],
+    "version": 4
+}
