@@ -17,10 +17,10 @@ fl = []
 br = []
 bl = []
 
-stand=0.65
+stand=0.50
 
 # control loop
-step = 20
+step = 100
 walk_width = 0.15
 rfjoint1=[0.11,stand]
 rbjoint1=[-0.11,stand]
@@ -36,7 +36,7 @@ def beginhold(trajectory, walkwidth,front,i):
     th2_i = -th2
     th1 = np.arctan2(y, x)-np.arccos(((x**2)+(y**2)+(link1**2)-(link2**2)) / (2*link1*math.sqrt(x**2+y**2)))
 
-    print("joint1: ", th1, " Joint2: ", th2)
+    
 
     
     if front==True:
@@ -51,7 +51,8 @@ def beginhold(trajectory, walkwidth,front,i):
         joint3 = [joint2[0]-link2*np.cos(th1+th2), joint2[1]-link2*np.sin(th1+th2)]
 
         trajectory.append([joint1, joint2, joint3])
-
+    
+    print("joint1: ", th1, " Joint2: ", th2)
     return joint1
 
 # comienzo desde atras
@@ -66,7 +67,7 @@ def beginstepforward(trajectory, walkwidth,front,i):
     th1 = np.arctan2(y, x)-np.arccos(((x**2)+(y**2)+(link1**2) -
                                       (link2**2)) / (2*link1*math.sqrt(x**2+y**2)))
 
-    print("joint1: ", th1, " Joint2: ", th2)
+    
 
     if front==True:
         joint1 = fjoint1
@@ -80,6 +81,7 @@ def beginstepforward(trajectory, walkwidth,front,i):
         joint3 = [joint2[0]-link2*np.cos(th1+th2), joint2[1]-link2*np.sin(th1+th2)]
 
         trajectory.append([joint1, joint2, joint3])
+    print("joint1: ", th1, " Joint2: ", th2)
 
 
 # paso atras
@@ -95,7 +97,7 @@ def pullback(trajectory, walkwidth,front,i):
     th1 = np.arctan2(y, x)-np.arccos(((x**2)+(y**2)+(link1**2) -
                                       (link2**2)) / (2*link1*math.sqrt(x**2+y**2)))
 
-    print("joint1: ", th1, " Joint2: ", th2)
+    
 
     th2i = np.arccos(((xi**2)+(yi**2)-(link1**2)-(link2**2))/(2*link1*link2))
     th1i = np.arctan2(yi, xi)-np.arccos(((xi**2)+(yi**2)+(link1**2) -
@@ -118,6 +120,7 @@ def pullback(trajectory, walkwidth,front,i):
         joint1 = [joint2[0]+link1*np.cos(th1), joint2[1]+link1*np.sin(th1)]
 
         trajectory.append([joint1, joint2, joint3])
+    print("joint1: ", th1, " Joint2: ", th2)
     return joint1
 
 # paso atras
@@ -133,7 +136,7 @@ def pullbackfoward(trajectory, walkwidth,front,i):
     th1 = np.arctan2(y, x)-np.arccos(((x**2)+(y**2)+(link1**2) -
                                       (link2**2)) / (2*link1*math.sqrt(x**2+y**2)))
 
-    print("joint1: ", th1, " Joint2: ", th2)
+    
 
     th2i = np.arccos(((xi**2)+(yi**2)-(link1**2)-(link2**2))/(2*link1*link2))
     th1i = np.arctan2(yi, xi)-np.arccos(((xi**2)+(yi**2)+(link1**2) -
@@ -156,6 +159,7 @@ def pullbackfoward(trajectory, walkwidth,front,i):
         joint1 = [joint2[0]+link1*np.cos(th1), joint2[1]+link1*np.sin(th1)]
 
         trajectory.append([joint1, joint2, joint3])
+    print("joint1: ", th1, " Joint2: ", th2)
     return joint1
 
 # paso atras
@@ -171,7 +175,7 @@ def pullbackbackward(trajectory, walkwidth,front,i):
     th1 = np.arctan2(y, x)-np.arccos(((x**2)+(y**2)+(link1**2) -
                                       (link2**2)) / (2*link1*math.sqrt(x**2+y**2)))
 
-    print("joint1: ", th1, " Joint2: ", th2)
+    
 
     th2i = np.arccos(((xi**2)+(yi**2)-(link1**2)-(link2**2))/(2*link1*link2))
     th1i = np.arctan2(yi, xi)-np.arccos(((xi**2)+(yi**2)+(link1**2) -
@@ -194,6 +198,8 @@ def pullbackbackward(trajectory, walkwidth,front,i):
         joint1 = [joint2[0]+link1*np.cos(th1), joint2[1]+link1*np.sin(th1)]
 
         trajectory.append([joint1, joint2, joint3])
+    
+    print("joint1: ", th1, " Joint2: ", th2)
     return joint1
 
 def stepforward(trajectory, walkwidth,front,i):
@@ -207,7 +213,7 @@ def stepforward(trajectory, walkwidth,front,i):
     th1 = np.arctan2(y, x)-np.arccos(((x**2)+(y**2)+(link1**2) -
                                       (link2**2)) / (2*link1*math.sqrt(x**2+y**2)))
 
-    print("joint1: ", th1, " Joint2: ", th2)
+    
 
     if front==True:
         joint1 = fjoint1
@@ -221,6 +227,10 @@ def stepforward(trajectory, walkwidth,front,i):
         joint3 = [joint2[0]-link2*np.cos(th1+th2), joint2[1]-link2*np.sin(th1+th2)]
 
         trajectory.append([joint1, joint2, joint3])
+    print("joint1: ", th1, " Joint2: ", th2)
+
+
+    
 print("\nMovement 1")
 for i in range(0, step):
     fjoint1 = beginhold(fl,walk_width,True,i)
@@ -243,24 +253,24 @@ for i in range(0, step):
     stepforward(fr, walk_width,True,i)
     bjoint1 = pullback(br, walk_width,False,i)
     stepforward(bl, walk_width,False,i)
-rfjoint1=fjoint1
-rbjoint1=bjoint1
-print("\nMovement 4")
-for i in range(0, step):
-    fjoint1 = pullbackfoward(fr, walk_width,True,i)
-    stepforward(fl, walk_width,True,i)
-    bjoint1 = pullbackfoward(bl, walk_width,False,i)
-    stepforward(br, walk_width,False,i)
-rfjoint1=fjoint1
-rbjoint1=bjoint1
-print("\nMovement 5")
-for i in range(0, step):
-    fjoint1 = pullbackbackward(fl, walk_width,True,i)
-    stepforward(fr, walk_width,True,i)  
-    bjoint1 = pullbackbackward(br, walk_width,False,i)
-    stepforward(bl, walk_width,False,i)  
-rfjoint1=fjoint1
-rbjoint1=bjoint1
+# rfjoint1=fjoint1
+# rbjoint1=bjoint1
+# print("\nMovement 4")
+# for i in range(0, step):
+#     fjoint1 = pullbackfoward(fr, walk_width,True,i)
+#     stepforward(fl, walk_width,True,i)
+#     bjoint1 = pullbackfoward(bl, walk_width,False,i)
+#     stepforward(br, walk_width,False,i)
+# rfjoint1=fjoint1
+# rbjoint1=bjoint1
+# print("\nMovement 5")
+# for i in range(0, step):
+#     fjoint1 = pullbackbackward(fl, walk_width,True,i)
+#     stepforward(fr, walk_width,True,i)  
+#     bjoint1 = pullbackbackward(br, walk_width,False,i)
+#     stepforward(bl, walk_width,False,i)  
+# rfjoint1=fjoint1
+# rbjoint1=bjoint1
 
 # # create a time array from 0..100 sampled at 0.05 second steps
 dt = 0.05
