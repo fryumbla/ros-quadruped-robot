@@ -57,8 +57,8 @@ DXL_ID                      = [1,2,3,4,5,6,7,8]
 # BAUDRATE                    = 1000000             # Dynamixel default baudrate : 57600
 BAUDRATE                    = 57600
 
-DEVICENAME0                 = '/dev/ttyUSB0'    # Check which port is being used on your controller
-DEVICENAME1                 = '/dev/ttyUSB1'    # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
+DEVICENAME0                 = '/dev/ttyUSB1'    # Check which port is being used on your controller
+DEVICENAME1                 = '/dev/ttyUSB0'    # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
 # Initialize PortHandler instance
 # Set the port path
@@ -218,13 +218,13 @@ def read_positions():
     dxl8_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler1, 8, ADDR_PRO_PRESENT_POSITION)
 
     #1 degree ~ 90
-    offset1 = -410
+    offset1 = 50
     offset2 = -80
-    offset3 = 167
-    offset4 = -300
+    offset3 = -30
+    offset4 = 10
     offset5 = 0
     offset6 = -300
-    offset7 = -168
+    offset7 = 150
     offset8 = -120
 
     theta1 = (20475.0 + offset1 -dxl1_present_position)*(15.0/120.0)*(360.0/4095.0)-90.0
@@ -329,8 +329,8 @@ def main():
     torque(DXL_ID1,portHandler1,1)
     
     while not rospy.is_shutdown():
-        read_positions()
-        rospy.Subscriber('/joint_goals', JointState, callback)
+        # read_positions()
+        rospy.Subscriber('/joint_states', JointState, callback,queue_size=1)
         rate = rospy.Rate(10) # 10hz
         rospy.spin()
 

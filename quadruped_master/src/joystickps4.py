@@ -28,8 +28,8 @@ class Key2Vel:
         angle=0
         angle2=0.5235987756
 
-        time=1
-        walkingtime=0.5
+        time=5
+        walkingtime=2
 
         
 

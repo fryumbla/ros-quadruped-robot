@@ -73,8 +73,12 @@ this create a topic
 * `/bolean_foots`: move to designated pose, in straight path. -->
 
 
-
-
+instalar todo esto para el joistick
+sudo pip install ds4drv
 sudo chmod 666 /dev/hidraw4
 https://github.com/naoki-mizuno/ds4_driver.git
+
+
+roslaunch quadruped_master joystick.launch
+roslaunch quadruped_communication quadruped_communication.launch
 
