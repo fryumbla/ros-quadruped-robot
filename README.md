@@ -73,3 +73,8 @@ this create a topic
 * `/bolean_foots`: move to designated pose, in straight path. -->
 
 
+
+
+sudo chmod 666 /dev/hidraw4
+https://github.com/naoki-mizuno/ds4_driver.git
+

@@ -1,0 +1,7 @@
+<launch>
+
+    <include file="$(find ds4_driver)/launch/ds4_driver.launch" />
+
+    <node name='joystick' pkg='quadruped_master' type='joystickps4.py' />
+
+</launch>
