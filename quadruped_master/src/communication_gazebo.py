@@ -24,19 +24,19 @@ def main():
 
     rospy.init_node("communication_gazebo")
 
-    pub1 = rospy.Publisher('quadruped/joint1_position_controller/command', Float64, queue_size=10)
-    pub2 = rospy.Publisher('quadruped/joint2_position_controller/command', Float64, queue_size=10)
-    pub3 = rospy.Publisher('quadruped/joint3_position_controller/command', Float64, queue_size=10)
-    pub4 = rospy.Publisher('quadruped/joint4_position_controller/command', Float64, queue_size=10)
-    pub5 = rospy.Publisher('quadruped/joint5_position_controller/command', Float64, queue_size=10)
-    pub6 = rospy.Publisher('quadruped/joint6_position_controller/command', Float64, queue_size=10)
-    pub7 = rospy.Publisher('quadruped/joint7_position_controller/command', Float64, queue_size=10)
-    pub8 = rospy.Publisher('quadruped/joint8_position_controller/command', Float64, queue_size=10)
+    pub1 = rospy.Publisher('quadruped/joint1_position_controller/command', Float64, queue_size=1)
+    pub2 = rospy.Publisher('quadruped/joint2_position_controller/command', Float64, queue_size=1)
+    pub3 = rospy.Publisher('quadruped/joint3_position_controller/command', Float64, queue_size=1)
+    pub4 = rospy.Publisher('quadruped/joint4_position_controller/command', Float64, queue_size=1)
+    pub5 = rospy.Publisher('quadruped/joint5_position_controller/command', Float64, queue_size=1)
+    pub6 = rospy.Publisher('quadruped/joint6_position_controller/command', Float64, queue_size=1)
+    pub7 = rospy.Publisher('quadruped/joint7_position_controller/command', Float64, queue_size=1)
+    pub8 = rospy.Publisher('quadruped/joint8_position_controller/command', Float64, queue_size=1)
 
     # rospy.Subscriber('joint_goals', JointState, callback)
     
     while not rospy.is_shutdown():
-        rospy.Subscriber('joint_goals', JointState, callback)
+        rospy.Subscriber('/joint_goals', JointState, callback, queue_size=1)
         pub1.publish(joint_goals.position[0])
         pub2.publish(joint_goals.position[1])
         pub3.publish(joint_goals.position[2])
