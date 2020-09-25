@@ -6,7 +6,7 @@ from std_msgs.msg import Header
 
 def main():
     rospy.init_node("motion_control")
-    pub = rospy.Publisher('/joint_states', JointState, queue_size=10)
+    pub = rospy.Publisher('/joint_goals', JointState, queue_size=10)
     joints_states = JointState()
 
     stand50j14=0.41944732836554044
