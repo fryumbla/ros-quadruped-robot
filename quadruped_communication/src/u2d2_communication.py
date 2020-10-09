@@ -323,14 +323,14 @@ def callback(data):
 def main():
 
     rospy.init_node("communication")
-    comunication0()
-    comunication1()
-    torque(DXL_ID0,portHandler0,1)
-    torque(DXL_ID1,portHandler1,1)
+    # comunication0()
+    # comunication1()
+    # torque(DXL_ID0,portHandler0,1)
+    # torque(DXL_ID1,portHandler1,1)
     
     while not rospy.is_shutdown():
         # read_positions()
-        rospy.Subscriber('/joint_states', JointState, callback,queue_size=1)
+        rospy.Subscriber('/joint_goals', JointState, callback,queue_size=1)
         rate = rospy.Rate(10) # 10hz
         rospy.spin()
 
