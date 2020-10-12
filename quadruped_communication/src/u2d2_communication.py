@@ -271,6 +271,9 @@ def read_positions():
 
 def callback(data):
 
+    current(DXL_ID0,portHandler0)
+    current(DXL_ID1,portHandler1)
+
     #1 degree ~ 90 /i did repair the motor 1 and we change for motor 1 and 7 position
     # offset1 = -410
     offset1 = 50
@@ -342,14 +345,13 @@ def main():
     rospy.init_node("communication")
     comunication0()
     comunication1()
-    torque(DXL_ID0,portHandler0,1)
-    torque(DXL_ID1,portHandler1,1)
+    # torque(DXL_ID0,portHandler0,1)
+    # torque(DXL_ID1,portHandler1,1)
     
     while not rospy.is_shutdown():
         read_positions()
-        current(DXL_ID0,portHandler0)
-        current(DXL_ID1,portHandler1)
-        # rospy.Subscriber('/joint_goals', JointState, callback,queue_size=1)
+
+        # rospy.Subscriber('/joint_goals', JointState, callback,queue_size=2)
         rate = rospy.Rate(10) # 10hz
         # rospy.spin()
 
