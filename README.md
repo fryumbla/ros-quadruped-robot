@@ -82,3 +82,6 @@ https://github.com/naoki-mizuno/ds4_driver.git
 roslaunch quadruped_master joystick.launch
 roslaunch quadruped_communication quadruped_communication.launch
 
+
+./vrep.sh
+
