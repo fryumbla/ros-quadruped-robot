@@ -43,6 +43,7 @@ ADDR_PRO_PROFILE_VELOCITY   = 112
 ADDR_PRO_GOAL_POSITION      = 116
 
 #ONLY READ
+ADDR_PRO_PRESENT_CURRENT    = 126
 ADDR_PRO_PRESENT_VELOCITY   = 128
 ADDR_PRO_PRESENT_POSITION   = 132
 ADDR_PRO_PRESENT_TEMPERATURE= 146
@@ -124,6 +125,22 @@ def comunication1():
             print("%s" % packetHandler.getRxPacketError(dxl_error))
         else:
             print("Dynamixel: ",i," has been successfully connected")
+
+
+def current(DXL_ID,portHandler):
+    print("current:")
+    for i in DXL_ID:
+        dxl_present_current, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, i, ADDR_PRO_PRESENT_CURRENT)
+
+        print int(dxl_present_current)
+        if int(dxl_present_current) >= 32767:
+            if 65535-int(dxl_present_current) >= 60:
+                packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, 0)
+                print("Motor ",i," is off") 
+        else:
+            if int(dxl_present_current) >= 60:
+                packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, 0)
+                print("Motor ",i," is off")
 
 
 
@@ -299,14 +316,14 @@ def callback(data):
     print("[1]%.2f\t[2]%.2f\t[3]%.2f\t[4]%.2f\t[5]%.2f\t[6]%.2f\t[7]%.2f\t[8]%.2f " % (dxl1_goal_position,dxl2_goal_position,dxl3_goal_position,dxl4_goal_position,dxl5_goal_position,dxl6_goal_position,dxl7_goal_position,dxl8_goal_position))
     print()
 
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, 1, ADDR_PRO_GOAL_POSITION, dxl1_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, 2, ADDR_PRO_GOAL_POSITION, dxl2_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 3, ADDR_PRO_GOAL_POSITION, dxl3_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 4, ADDR_PRO_GOAL_POSITION, dxl4_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, 5, ADDR_PRO_GOAL_POSITION, dxl5_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, 6, ADDR_PRO_GOAL_POSITION, dxl6_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 7, ADDR_PRO_GOAL_POSITION, dxl7_goal_position)
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 8, ADDR_PRO_GOAL_POSITION, dxl8_goal_position)
+    # dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, 1, ADDR_PRO_GOAL_POSITION, dxl1_goal_position)
+    # dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, 2, ADDR_PRO_GOAL_POSITION, dxl2_goal_position)
+    # dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 3, ADDR_PRO_GOAL_POSITION, dxl3_goal_position)
+    # dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 4, ADDR_PRO_GOAL_POSITION, dxl4_goal_position)
+    # dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, 5, ADDR_PRO_GOAL_POSITION, dxl5_goal_position)
+    # dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler0, 6, ADDR_PRO_GOAL_POSITION, dxl6_goal_position)
+    # dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 7, ADDR_PRO_GOAL_POSITION, dxl7_goal_position)
+    # dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler1, 8, ADDR_PRO_GOAL_POSITION, dxl8_goal_position)
 
     # joint_position_state=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     # pub = rospy.Publisher('current_joint_states', JointState, queue_size=10)
@@ -324,15 +341,17 @@ def main():
 
     rospy.init_node("communication")
     # comunication0()
-    # comunication1()
+    comunication1()
     # torque(DXL_ID0,portHandler0,1)
-    # torque(DXL_ID1,portHandler1,1)
+    torque(DXL_ID1,portHandler1,1)
     
     while not rospy.is_shutdown():
+        print "test"
         # read_positions()
+        current(DXL_ID1,portHandler1)
         rospy.Subscriber('/joint_goals', JointState, callback,queue_size=1)
         rate = rospy.Rate(10) # 10hz
-        rospy.spin()
+        # rospy.spin()
 
 if __name__ == '__main__':
     try:
