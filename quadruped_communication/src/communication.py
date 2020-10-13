@@ -143,11 +143,11 @@ class motor:
         for i in DXL_ID:
             dxl_present_current, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, i, ADDR_PRO_PRESENT_CURRENT)
             if int(dxl_present_current) >= 32767:
-                if 65535-int(dxl_present_current) >= 150:
+                if 65535-int(dxl_present_current) >= 180:
                     print("Motor ",i," is off",65535-int(dxl_present_current))
                     packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, 0) 
             else:
-                if int(dxl_present_current) >= 150:
+                if int(dxl_present_current) >= 180:
                     print("Motor ",i," is off",int(dxl_present_current))
                     packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, 0)
 
@@ -300,8 +300,8 @@ class motor:
 
         self.comunication0()
         self.comunication1()
-        # torque(DXL_ID0,portHandler0,1)
-        # torque(DXL_ID1,portHandler1,1)
+        self.torque(DXL_ID0,portHandler0,1)
+        self.torque(DXL_ID1,portHandler1,1)
         self.current(DXL_ID0,portHandler0)
         self.current(DXL_ID1,portHandler1)
         # movement()
@@ -310,8 +310,8 @@ class motor:
         rospy.init_node("communication")
         self.r =rospy.Rate(10)
         rospy.Subscriber('/joint_goals', JointState, self.callback,queue_size=1)
+        print("hola")
         # rospy.spin()
-        # print("hola")
 
     def loop(self):
         self.r.sleep()
@@ -322,7 +322,7 @@ class motor:
 if __name__ == '__main__':
     motor = motor()
     while not rospy.is_shutdown():
-        motor.loop(10)
+        motor.loop()
     portHandler0.closePort()
     portHandler1.closePort()
     # try:
