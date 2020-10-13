@@ -354,8 +354,8 @@ def main():
     rospy.init_node("communication")
     comunication0()
     comunication1()
-    torque(DXL_ID0,portHandler0,1)
-    torque(DXL_ID1,portHandler1,1)
+    # torque(DXL_ID0,portHandler0,1)
+    # torque(DXL_ID1,portHandler1,1)
     
     while not rospy.is_shutdown():
         # read_positions()
