@@ -58,8 +58,8 @@ DXL_ID                      = [1,2,3,4,5,6,7,8]
 # BAUDRATE                    = 1000000             # Dynamixel default baudrate : 57600
 BAUDRATE                    = 57600
 
-DEVICENAME0                 = '/dev/ttyUSB0'    # Check which port is being used on your controller
-DEVICENAME1                 = '/dev/ttyUSB1'    # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
+DEVICENAME0                 = '/dev/ttyUSB1'    # Check which port is being used on your controller
+DEVICENAME1                 = '/dev/ttyUSB0'    # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
 # Initialize PortHandler instance
 # Set the port path
@@ -67,6 +67,15 @@ DEVICENAME1                 = '/dev/ttyUSB1'    # ex) Windows: "COM1"   Linux: "
 portHandler0 = PortHandler(DEVICENAME0)
 portHandler1 = PortHandler(DEVICENAME1)
 packetHandler = PacketHandler(PROTOCOL_VERSION)
+
+theta1=0
+theta2=0
+theta3=0
+theta4=0
+theta5=0
+theta6=0
+theta7=0
+theta8=0
 
 def comunication0():
     # Open port
@@ -131,16 +140,14 @@ def current(DXL_ID,portHandler):
     # print("current:")
     for i in DXL_ID:
         dxl_present_current, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, i, ADDR_PRO_PRESENT_CURRENT)
-
-        # print int(dxl_present_current)s
         if int(dxl_present_current) >= 32767:
-            if 65535-int(dxl_present_current) >= 60:
-                packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, 0)
-                print("Motor ",i," is off") 
+            if 65535-int(dxl_present_current) >= 150:
+                print("Motor ",i," is off",65535-int(dxl_present_current))
+                packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, 0) 
         else:
-            if int(dxl_present_current) >= 60:
+            if int(dxl_present_current) >= 150:
+                print("Motor ",i," is off",int(dxl_present_current))
                 packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, 0)
-                print("Motor ",i," is off")
 
 
 
@@ -237,7 +244,7 @@ def read_positions():
     #1 degree ~ 90
     offset1 = 50
     offset2 = -80
-    offset3 = -30
+    offset3 = -300
     offset4 = 10
     offset5 = 0
     offset6 = -300
@@ -270,18 +277,6 @@ def read_positions():
     return joint_position
 
 def callback(data):
-
-    #1 degree ~ 90 /i did repair the motor 1 and we change for motor 1 and 7 position
-    # offset1 = -410
-    offset1 = 50
-    offset2 = -80
-    offset3 = -30
-    offset4 = 10
-    offset5 = 0
-    offset6 = -300
-    offset7 = 150
-    offset8 = -120
-
     #esta configuracion es con lo siguiente mensaje joint1 front and backs y despues los dos
     # theta1 = data.position[1]*180/3.1416
     # theta2 = data.position[5]*180/3.1416
@@ -301,8 +296,21 @@ def callback(data):
     theta7 = data.position[6]*180/3.1416
     theta8 = data.position[7]*180/3.1416
     
-    print("[1]%.2f\t[2]%.2f\t[3]%.2f\t[4]%.2f\t[5]%.2f\t[6]%.2f\t[7]%.2f\t[8]%.2f " % (theta1,theta2,theta3,theta4,theta5,theta6,theta7,theta8))
     
+def movement():
+    
+    #1 degree ~ 90 /i did repair the motor 1 and we change for motor 1 and 7 position
+    # offset1 = -410
+    offset1 = 50
+    offset2 = -80
+    offset3 = -300
+    offset4 = 10
+    offset5 = 0
+    offset6 = -300
+    offset7 = 150
+    offset8 = -120    
+
+    print("[1]%.2f\t[2]%.2f\t[3]%.2f\t[4]%.2f\t[5]%.2f\t[6]%.2f\t[7]%.2f\t[8]%.2f " % (theta1,theta2,theta3,theta4,theta5,theta6,theta7,theta8))
 
     dxl1_goal_position = int(20475.0 + offset1-((theta1+90.0)/((15.0/120.0)*(360.0/4095.0))))
     dxl2_goal_position = int(16380.0 + offset2-((theta2)/((15.0/120.0)*(360.0/4095.0))))
@@ -336,6 +344,10 @@ def callback(data):
     # joints_states.velocity = []
     # joints_states.effort = []
     # pub.publish(joints_states)
+    current(DXL_ID0,portHandler0)
+    current(DXL_ID1,portHandler1)
+
+
     
 def main():
 
@@ -346,12 +358,18 @@ def main():
     torque(DXL_ID1,portHandler1,1)
     
     while not rospy.is_shutdown():
-        read_positions()
+        # read_positions()
+        rospy.Subscriber('/joint_goals', JointState, callback,queue_size=1)
+        movement()
         current(DXL_ID0,portHandler0)
         current(DXL_ID1,portHandler1)
-        # rospy.Subscriber('/joint_goals', JointState, callback,queue_size=1)
-        rate = rospy.Rate(10) # 10hz
-        # rospy.spin()
+
+        # rate = rospy.Rate(10) # 10hz
+        print("hola")
+        rospy.spin()
+        print("hola")
+
+
 
 if __name__ == '__main__':
     try:

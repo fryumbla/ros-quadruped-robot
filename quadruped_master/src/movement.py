@@ -6,7 +6,7 @@ from std_msgs.msg import Header
 
 def main():
     rospy.init_node("motion_control")
-    pub = rospy.Publisher('/joint_goals', JointState, queue_size=10)
+    pub = rospy.Publisher('/joint_goals', JointState, queue_size=1)
     joints_states = JointState()
 
     stand50j14=0.41944732836554044
@@ -34,8 +34,12 @@ def main():
         # joint_position_state=[-1,2,-1,2,-1,2,-1,2]
         # joint_position_state=[0,0,0,0,0,0,0,0]
         number = input ("Enter number: ")
-        if (number==1):
+        if (number==0):
             joint_position_state=[0,0,0,0,0,0,0,0]
+            joints_states.position = joint_position_state
+            pub.publish(joints_states)
+        if (number==1):
+            joint_position_state=[-1,0,-1,0,-1,0,-1,0]
             joints_states.position = joint_position_state
             pub.publish(joints_states)
         if (number==2):
@@ -492,6 +496,7 @@ def main():
             joints_states.position = joint_position_state
             pub.publish(joints_states)
             rospy.sleep(time)
+
 
 
 
