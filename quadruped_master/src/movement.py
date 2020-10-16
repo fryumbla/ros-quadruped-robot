@@ -22,6 +22,11 @@ class movement:
         angle2=0.5235987756
         time=1
         walkingtime=0.5
+
+        self.joints_states = JointState()
+        self.joints_states.header = Header()
+        self.joints_states.header.stamp = rospy.Time.now()
+        self.joints_states.name = ['front_right_joint1', 'front_right_joint2', 'front_left_joint1','front_left_joint2', 'back_left_joint1', 'back_left_joint2', 'back_right_joint1','back_right_joint2']
             
         # self.joint_position_state=[-1,2,-1,2,-1,2,-1,2]
         # self.joint_position_state=[0,0,0,0,0,0,0,0]
@@ -489,16 +494,19 @@ class movement:
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
 
+        return 0
+
+
     def __init__(self):
-        self.joints_states = JointState()
-        self.joints_states.header = Header()
-        self.joints_states.header.stamp = rospy.Time.now()
-        self.joints_states.name = ['front_right_joint1', 'front_right_joint2', 'front_left_joint1','front_left_joint2', 'back_left_joint1', 'back_left_joint2', 'back_right_joint1','back_right_joint2']
-            
         rospy.init_node("motion_control")
-        self.r = rospy.Rate(1000)
+        self.r = rospy.Rate(10)
+
+        
         self.pub = rospy.Publisher('/joint_goals', JointState, queue_size=1)
         self.main()
+
+        # rospy.spin()
+        
 
     def loop(self):
         self.r.sleep()

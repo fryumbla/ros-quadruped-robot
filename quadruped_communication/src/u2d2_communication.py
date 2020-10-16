@@ -141,11 +141,11 @@ def current(DXL_ID,portHandler):
     for i in DXL_ID:
         dxl_present_current, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, i, ADDR_PRO_PRESENT_CURRENT)
         if int(dxl_present_current) >= 32767:
-            if 65535-int(dxl_present_current) >= 150:
+            if 65535-int(dxl_present_current) >= 50:
                 print("Motor ",i," is off",65535-int(dxl_present_current))
                 packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, 0) 
         else:
-            if int(dxl_present_current) >= 150:
+            if int(dxl_present_current) >= 50:
                 print("Motor ",i," is off",int(dxl_present_current))
                 packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, 0)
 
@@ -354,20 +354,20 @@ def main():
     rospy.init_node("communication")
     comunication0()
     comunication1()
-    # torque(DXL_ID0,portHandler0,1)
-    # torque(DXL_ID1,portHandler1,1)
+    torque(DXL_ID0,portHandler0,1)
+    torque(DXL_ID1,portHandler1,1)
     
     while not rospy.is_shutdown():
-        # read_positions()
-        rospy.Subscriber('/joint_goals', JointState, callback,queue_size=1)
-        movement()
+        read_positions()
+        # rospy.Subscriber('/joint_goals', JointState, callback,queue_size=1)
+        # movement()
         current(DXL_ID0,portHandler0)
         current(DXL_ID1,portHandler1)
 
         # rate = rospy.Rate(10) # 10hz
-        print("hola")
-        rospy.spin()
-        print("hola")
+        # print("hola")
+        # rospy.spin()
+        # print("hola")
 
 
 

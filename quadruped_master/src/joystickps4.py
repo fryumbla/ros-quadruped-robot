@@ -321,11 +321,11 @@ class Key2Vel:
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-0.785398,g30*4,-g30,g30*5, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
+            self.joint_position_state=[-g30*2,g30*4,-g30,g30*5, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-g45,g30*3,-g30,g30*5, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
+            self.joint_position_state=[-g30*2,g30*3,-g30,g30*5, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
@@ -339,11 +339,11 @@ class Key2Vel:
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-g30,g30*3,-0.785398,g30*4, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
+            self.joint_position_state=[-g30,g30*3,-g30*2,g30*4, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-g30,g30*3,-g45,g30*3, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
+            self.joint_position_state=[-g30,g30*3,-g30*2,g30*3, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
@@ -428,6 +428,8 @@ class Key2Vel:
 
         elif key_msg.button_ps == 1:   #HOME_POS
             rospy.is_shutdown()
+
+        # self.pub.publish(self.joints_states)
 
 
 

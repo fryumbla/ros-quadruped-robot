@@ -143,14 +143,13 @@ class motor:
         for i in DXL_ID:
             dxl_present_current, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, i, ADDR_PRO_PRESENT_CURRENT)
             if int(dxl_present_current) >= 32767:
-                if 65535-int(dxl_present_current) >= 180:
+                if 65535-int(dxl_present_current) >= 500:
                     print("Motor ",i," is off",65535-int(dxl_present_current))
                     packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, 0) 
             else:
-                if int(dxl_present_current) >= 180:
+                if int(dxl_present_current) >= 500:
                     print("Motor ",i," is off",int(dxl_present_current))
                     packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, 0)
-
 
 
     def torque(self,DXL_ID,portHandler, order):
@@ -246,14 +245,14 @@ class motor:
         
         #1 degree ~ 90 /i did repair the motor 1 and we change for motor 1 and 7 position
         # offset1 = -410
-        offset1 = 50
+        offset1 = 200
         offset2 = -80
-        offset3 = -300
+        offset3 = -200
         offset4 = 10
-        offset5 = 0
-        offset6 = -300
-        offset7 = 150
-        offset8 = -120    
+        offset5 = 10
+        offset6 = -150
+        offset7 = 80
+        offset8 = -200    
 
         print("[1]%.2f\t[2]%.2f\t[3]%.2f\t[4]%.2f\t[5]%.2f\t[6]%.2f\t[7]%.2f\t[8]%.2f " % (theta1,theta2,theta3,theta4,theta5,theta6,theta7,theta8))
 
@@ -292,12 +291,7 @@ class motor:
         self.current(DXL_ID0,portHandler0)
         self.current(DXL_ID1,portHandler1)
 
-
-        
     def __init__(self):
-
-
-
         self.comunication0()
         self.comunication1()
         self.torque(DXL_ID0,portHandler0,1)
@@ -305,15 +299,17 @@ class motor:
         self.current(DXL_ID0,portHandler0)
         self.current(DXL_ID1,portHandler1)
         # movement()
-
         
         rospy.init_node("communication")
         self.r =rospy.Rate(10)
+        # self.read_positions()
         rospy.Subscriber('/joint_goals', JointState, self.callback,queue_size=1)
-        print("hola")
+        
         # rospy.spin()
 
     def loop(self):
+        # self.current(DXL_ID0,portHandler0)
+        # self.current(DXL_ID1,portHandler1)
         self.r.sleep()
     
 
