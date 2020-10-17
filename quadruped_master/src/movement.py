@@ -332,11 +332,11 @@ class movement:
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-0.785398,g30*4,-g30,g30*5, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
+            self.joint_position_state=[-g30*2,g30*4,-g30,g30*5, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-g45,g30*3,-g30,g30*5, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
+            self.joint_position_state=[-g30*2,g30*3,-g30,g30*5, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
@@ -350,11 +350,11 @@ class movement:
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-g30,g30*3,-0.785398,g30*4, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
+            self.joint_position_state=[-g30,g30*3,-g30*2,g30*4, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-g30,g30*3,-g45,g30*3, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
+            self.joint_position_state=[-g30,g30*3,-g30*2,g30*3, g30,stand50j58-g30*2/3, g30,stand50j58-g30*2/3]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
@@ -366,57 +366,80 @@ class movement:
             # # checkear el movimiento del cuerpo
             
             # Body motion 
-            self.joint_position_state=[-g30*2/3,g30*5,-g30*2/3,g30*5, stand50j14-angle,g30*2/3,stand50j14-angle,g30*2/3]
+            self.joint_position_state=[-g30*2/3,g30*4,-g30*2/3,g30*4, stand50j14-angle,g30*5/3,stand50j14-angle,g30*5/3]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-g30*4/3,g30*5,-g30*4/3,g30*5, stand50j14+g30*2/3,g30*2/3,stand50j14+g30*2/3,g30*2/3]
+            self.joint_position_state=[-g30*4/3,g30*5,-g30*4/3,g30*5, stand50j14+g30*2/3,g30,stand50j14+g30*2/3,g30]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*2/3,g30*4/3,stand50j14+g30*2/3,g30*4/3]
-            self.joints_states.position = self.joint_position_state
-            self.pub.publish(self.joints_states)
-            rospy.sleep(time)
-
-            #right leg back top stair (third)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*2/3,g30*4/3,-g30*7/3,0]
-            self.joints_states.position = self.joint_position_state
-            self.pub.publish(self.joints_states)
-            rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*2/3,g30*4/3,-g30*7/3,g30*3]
-            self.joints_states.position = self.joint_position_state
-            self.pub.publish(self.joints_states)
-            rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*2/3,g30*4/3,-g30*7/3,g30*5]
-            self.joints_states.position = self.joint_position_state
-            self.pub.publish(self.joints_states)
-            rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*2/3,g30*4/3,g30*1/3,g30*5]
+            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*4/3,g30,stand50j14+g30*4/3,g30]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
 
-            #left leg back top stair (third)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, -g30*7/3,0,g30*1/3,g30*5]
+            # #right leg back top stair (third)
+            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*4/3,g30,-g30*7/3,0]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, -g30*7/3,g30*3,g30*1/3,g30*5]
+            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*4/3,g30,-g30*7/3,g30*3]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, -g30*7/3,g30*5,g30*1/3,g30*5]
+            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*4/3,g30,-g30*7/3,g30*5]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, g30*1/3,g30*5,g30*1/3,g30*5]
+            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*4/3,g30,g30,g30*5]
+            self.joints_states.position = self.joint_position_state
+            self.pub.publish(self.joints_states)
+            rospy.sleep(time)
+            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*4/3,g30,g30*4/3,g30*5]
+            self.joints_states.position = self.joint_position_state
+            self.pub.publish(self.joints_states)
+            rospy.sleep(time)
+            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*4/3,g30,g30*4/3,g30*5-g30*1/3]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
 
+            # #left leg back top stair (third)
+            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, -g30*7/3,0,g30*4/3,g30*5-g30*1/3]
+            self.joints_states.position = self.joint_position_state
+            self.pub.publish(self.joints_states)
+            rospy.sleep(time)
+            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, -g30*7/3,g30*3,g30*4/3,g30*5-g30*1/3]
+            self.joints_states.position = self.joint_position_state
+            self.pub.publish(self.joints_states)
+            rospy.sleep(time)
+            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, -g30*7/3,g30*5,g30*4/3,g30*5-g30*1/3]
+            self.joints_states.position = self.joint_position_state
+            self.pub.publish(self.joints_states)
+            rospy.sleep(time)
+            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, g30,g30*5,g30*4/3,g30*5-g30*1/3]
+            self.joints_states.position = self.joint_position_state
+            self.pub.publish(self.joints_states)
+            rospy.sleep(time)
+            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, g30*4/3,g30*5,g30*4/3,g30*5-g30*1/3]
+            self.joints_states.position = self.joint_position_state
+            self.pub.publish(self.joints_states)
+            rospy.sleep(time)
+            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, g30*4/3,g30*5-g30*1/3,g30*4/3,g30*5-g30*1/3]
+            self.joints_states.position = self.joint_position_state
+            self.pub.publish(self.joints_states)
+            rospy.sleep(time)
 
             # Body motion 
+            self.joint_position_state=[-g30*4/3,g30*5,-g30*4/3,g30*5, g30*4/3,g30*5-g30*1/3,g30*4/3,g30*5-g30*1/3]
+            self.joints_states.position = self.joint_position_state
+            self.pub.publish(self.joints_states)
+            rospy.sleep(time)
+            self.joint_position_state=[-g30*3/3,g30*5,-g30*3/3,g30*5, g30*2/3,g30*5,g30*2/3,g30*5]
+            self.joints_states.position = self.joint_position_state
+            self.pub.publish(self.joints_states)
+            rospy.sleep(time)
             self.joint_position_state=[-g30*2/3,g30*5,-g30*2/3,g30*5, -g30*2/3,g30*5,-g30*2/3,g30*5]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
@@ -424,75 +447,35 @@ class movement:
 
 
 
-            # self.joint_position_state=[-g30*1/3,g30*5,-g30*1/3,g30*5, -g30,g30*5,-g30,g30*5]
-            # self.joints_states.position = self.joint_position_state
-            # self.pub.publish(self.joints_states)
             # rospy.sleep(time)
-            # self.joint_position_state=[0,g30*5,0,g30*5, -g30*4/3,g30*5,-g30*4/3,g30*5]
+            # self.joint_position_state=[stand50j14,stand50j58,stand50j14,stand50j58,stand50j14,stand50j58,stand50j14,stand50j58]
             # self.joints_states.position = self.joint_position_state
-            # self.pub.publish(self.joints_states)
+            # self.pub.publish(self.joints_states) 
             # rospy.sleep(time)
+
+
 
 
 
 
         if (number==9):
-            # Body motion 
-            self.joint_position_state=[-g30*2/3,g30*5,-g30*2/3,g30*5, stand50j14-angle,g30*2/3,stand50j14-angle,g30*2/3]
-            self.joints_states.position = self.joint_position_state
-            self.pub.publish(self.joints_states)
-            rospy.sleep(time)
-            self.joint_position_state=[-g30*4/3,g30*5,-g30*4/3,g30*5, stand50j14+g30*2/3,g30*2/3,stand50j14+g30*2/3,g30*2/3]
-            self.joints_states.position = self.joint_position_state
-            self.pub.publish(self.joints_states)
-            rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*2/3,g30*4/3,stand50j14+g30*2/3,g30*4/3]
-            self.joints_states.position = self.joint_position_state
-            self.pub.publish(self.joints_states)
-            rospy.sleep(time)
 
-            #right leg back top stair (third)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*2/3,g30*4/3,-g30*7/3,0]
+            # frontal derecha
+            self.joint_position_state=[-g30*2,g30*5,-g30*2/3,g30*5, -g30*2/3,g30*5,-g30*2/3,g30*5]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*2/3,g30*4/3,-g30*7/3,g30*3]
+            self.joint_position_state=[-g30*2,0,-g30*2/3,g30*5, -g30*2/3,g30*5,-g30*2/3,g30*5]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*2/3,g30*4/3,-g30*7/3,g30*5]
-            self.joints_states.position = self.joint_position_state
-            self.pub.publish(self.joints_states)
-            rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, stand50j14+g30*2/3,g30*4/3,g30*1/3,g30*5]
-            self.joints_states.position = self.joint_position_state
-            self.pub.publish(self.joints_states)
-            rospy.sleep(time)
-
-            #left leg back top stair (third)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, -g30*7/3,0,g30*1/3,g30*5]
-            self.joints_states.position = self.joint_position_state
-            self.pub.publish(self.joints_states)
-            rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, -g30*7/3,g30*3,g30*1/3,g30*5]
-            self.joints_states.position = self.joint_position_state
-            self.pub.publish(self.joints_states)
-            rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, -g30*7/3,g30*5,g30*1/3,g30*5]
-            self.joints_states.position = self.joint_position_state
-            self.pub.publish(self.joints_states)
-            rospy.sleep(time)
-            self.joint_position_state=[-g30*6/3,g30*5,-g30*6/3,g30*5, g30*1/3,g30*5,g30*1/3,g30*5]
+            self.joint_position_state=[g30,g30*2/3,-g30*2/3,g30*5, -g30*2/3,g30*5,-g30*2/3,g30*5]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
             rospy.sleep(time)
 
 
-            # Body motion 
-            self.joint_position_state=[-g30*2/3,g30*5,-g30*2/3,g30*5, -g30*2/3,g30*5,-g30*2/3,g30*5]
-            self.joints_states.position = self.joint_position_state
-            self.pub.publish(self.joints_states)
-            rospy.sleep(time)
+
 
         return 0
 
@@ -500,15 +483,10 @@ class movement:
     def __init__(self):
         rospy.init_node("motion_control")
         self.r = rospy.Rate(10)
-
-        
         self.pub = rospy.Publisher('/joint_goals', JointState, queue_size=1)
-        self.main()
-
-        # rospy.spin()
-        
 
     def loop(self):
+        self.main()
         self.r.sleep()
 
 
