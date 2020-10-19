@@ -657,6 +657,7 @@ class Key2Vel:
             self.joint_position_state=[0,0,0,0,0,0,0,0]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)  
+            rospy.sleep(time) 
             self.joint_position_state=[-g30*2/3,g30*5,-g30*2/3,g30*5, -g30*2/3,g30*5,-g30*2/3,g30*5]
             self.joints_states.position = self.joint_position_state
             self.pub.publish(self.joints_states)
