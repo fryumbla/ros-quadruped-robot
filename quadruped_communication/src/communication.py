@@ -143,11 +143,11 @@ class motor:
         for i in DXL_ID:
             dxl_present_current, dxl_comm_result, dxl_error = packetHandler.read2ByteTxRx(portHandler, i, ADDR_PRO_PRESENT_CURRENT)
             if int(dxl_present_current) >= 32767:
-                if 65535-int(dxl_present_current) >= 500:
+                if 65535-int(dxl_present_current) >= 800:
                     print("Motor ",i," is off",65535-int(dxl_present_current))
                     packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, 0) 
             else:
-                if int(dxl_present_current) >= 500:
+                if int(dxl_present_current) >= 800:
                     print("Motor ",i," is off",int(dxl_present_current))
                     packetHandler.write1ByteTxRx(portHandler, i, ADDR_PRO_TORQUE_ENABLE, 0)
 
