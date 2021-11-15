@@ -79,6 +79,27 @@ theta8=0
 
 class motor:
 
+    def __init__(self):
+        self.comunication0()
+        self.comunication1()
+        self.torque(DXL_ID0,portHandler0,1)
+        self.torque(DXL_ID1,portHandler1,1)
+        self.current(DXL_ID0,portHandler0)
+        self.current(DXL_ID1,portHandler1)
+        # movement()
+        
+        rospy.init_node("communication")
+        self.r =rospy.Rate(10)
+        # self.read_positions()
+        rospy.Subscriber('/joint_goals', JointState, self.callback,queue_size=1)
+        
+        # rospy.spin()
+
+    def loop(self):
+        # self.current(DXL_ID0,portHandler0)
+        # self.current(DXL_ID1,portHandler1)
+        self.r.sleep()
+
     def comunication0(self):
         # Open port
         if portHandler0.openPort():
@@ -290,29 +311,6 @@ class motor:
         # pub.publish(joints_states)
         self.current(DXL_ID0,portHandler0)
         self.current(DXL_ID1,portHandler1)
-
-    def __init__(self):
-        self.comunication0()
-        self.comunication1()
-        self.torque(DXL_ID0,portHandler0,1)
-        self.torque(DXL_ID1,portHandler1,1)
-        self.current(DXL_ID0,portHandler0)
-        self.current(DXL_ID1,portHandler1)
-        # movement()
-        
-        rospy.init_node("communication")
-        self.r =rospy.Rate(10)
-        # self.read_positions()
-        rospy.Subscriber('/joint_goals', JointState, self.callback,queue_size=1)
-        
-        # rospy.spin()
-
-    def loop(self):
-        # self.current(DXL_ID0,portHandler0)
-        # self.current(DXL_ID1,portHandler1)
-        self.r.sleep()
-    
-
 
 
 if __name__ == '__main__':
