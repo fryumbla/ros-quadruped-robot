@@ -9,22 +9,28 @@
 
 ### 1.1. System Requirements
 
-This package is written an tested on **Ubuntu 18.04 + ROS Melodic** environment. Dependencies are also for this environment.
+This package is written an tested on **Ubuntu 20.04 + ROS Noetic** environment. Dependencies are also for this environment.
 
-V-REP must be installed in advance.
+#### 1.1.1 Desktop 
+
+Install ROS in your Ubuntu 20.04 computer (follow this tutorials): http://wiki.ros.org/noetic/Installation/Ubuntu
+
+Create a ROS Workspace: ~/catkin_ws
 
 ### 1.2. Dependencies Prerequisites
 
-<!-- There are a number of dependencies in this package, since the ABB robot is operated by ROS-Industrial package. Please install all the packages listed below in your Ubuntu PC, in the given order. These packages can be installed by `apt` package manager.
+Please install all the packages listed below in your Ubuntu PC or Jetson Nano, in the given order.
 
-* ros-kinetic-rosserial-arduino
-* ros-kinetic-rosserial
+* ros-noetic-moveit
 
-Dont forget to clone 
+### 1.3 Build
 
-'git clone https://github.com/ros-drivers/rosserial.git'
+Extract the metapackage `ros-quadruped-robot` into `${ros_workspace}/src`. and `catkin_make` your workspace.
+```
+git clone --recursive https://github.com/fryumbla/ros-quadruped-robot.git
 
-Now,Extract the metapackage `Quadruped_Foots` into `${ros_workspace}/src`. `catkin_make` your workspace. -->
+catkin_make
+```
 
 
 ## 2. Structure of Package
@@ -50,9 +56,9 @@ To be updated...
    ```
 
 
-### 3.2. V-REP Simulation
+### 3.2. CoppeliaSim Simulation
 
-1. V-REP execution (Since simulation is performed with vrep remote api, roscore must be executed first)
+1. CoppeliaSim execution (Since simulation is performed with vrep remote api, roscore must be executed first)
 
 2. Run the modules needed for the demo with roslaunch
    ```
@@ -71,7 +77,7 @@ this create a topic
 
 * `/Foots_Touch`: move to designated pose 
 * `/bolean_foots`: move to designated pose, in straight path. -->
-
+<!-- 
 
 instalar todo esto para el joistick
 sudo pip install ds4drv
@@ -83,5 +89,5 @@ roslaunch quadruped_master joystick.launch
 roslaunch quadruped_communication quadruped_communication.launch
 
 
-./vrep.sh
+./vrep.sh -->
 
