@@ -58,9 +58,11 @@ To be updated...
 
 ### 3.2. CoppeliaSim Simulation
 
-1. CoppeliaSim execution (Since simulation is performed with vrep remote api, roscore must be executed first)
+1. CoppeliaSim execution (Open the scene: 
+ros-quadruped-robot/quadruped_vrep/scenes/
+), and play
 
-2. Run the modules needed for the demo with roslaunch
+2. Run the modules needed for the demo with roslaunch and the movement program
    ```
    roslaunch quadruped_vrep vrep.launch
    ```
