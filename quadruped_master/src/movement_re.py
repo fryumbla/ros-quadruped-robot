@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import rospy
 
 from sensor_msgs.msg import JointState
@@ -6,7 +6,7 @@ from std_msgs.msg import Header
 
 def main():
     rospy.init_node("motion_control")
-    pub = rospy.Publisher('/joint_states', JointState, queue_size=10)
+    pub = rospy.Publisher('/joint_states', JointState, queue_size=1)
     joints_states = JointState()
 
     stand50j14=0.41944732836554044
@@ -30,11 +30,14 @@ def main():
         time=1
         walkingtime=0.5
         rate = rospy.Rate(10) # 10hz  
-             
+
+        
         # joint_position_state=[-1,2,-1,2,-1,2,-1,2]
         # joint_position_state=[0,0,0,0,0,0,0,0]
-        number = input ("Enter number: ")
+        imp = input ("Enter number: ")
+        number = int(imp)
         if (number==1):
+            print("hola")
             joint_position_state=[0,0,0,0,0,0,0,0]
             joints_states.position = joint_position_state
             pub.publish(joints_states)

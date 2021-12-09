@@ -4,5 +4,11 @@
         "/home/francisco/robotis_ws/devel/lib/python2.7/dist-packages",
         "/home/francisco/catkin_ws/devel/lib/python2.7/dist-packages",
         "/opt/ros/melodic/lib/python2.7/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/francisco/cobots_ws/devel/lib/python2.7/dist-packages",
+        "/home/francisco/robotis_ws/devel/lib/python2.7/dist-packages",
+        "/home/francisco/catkin_ws/devel/lib/python2.7/dist-packages",
+        "/opt/ros/melodic/lib/python2.7/dist-packages"
     ]
 }
