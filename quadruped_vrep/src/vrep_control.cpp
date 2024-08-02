@@ -14,12 +14,13 @@ sensor_msgs::JointState pub_msg;
 int found(int a,char* b,int c,int d)
 {
   if(simxGetObjectHandle(a,(const simxChar*) b,(simxInt *) &c,(simxInt) simx_opmode_oneshot_wait)){
-    cout << "no joint " << d << " found" << std::endl;
+    cout << "no joint " << d << " found " << b<< std::endl;
   }
   else{
+    cout << "joint " << d << " found: "  << b << std::endl;
     return c;
-    cout << "joint " << d << " found"  << std::endl;
   }
+  return -1;
 }
 
 void joint_callback(const sensor_msgs::JointState& data)
@@ -32,6 +33,7 @@ void joint_callback(const sensor_msgs::JointState& data)
     char *cstr = new char[data.name.at(i).length() + 1];
     strcpy(cstr, data.name.at(i).c_str());
     joints.push_back(cstr);
+    ROS_INFO("Joint name: %s", cstr);  // Agregar mensaje de depuración
   }
 
   std::vector<int> joint_handle;
@@ -41,17 +43,29 @@ void joint_callback(const sensor_msgs::JointState& data)
   }
   for (int i=0;i<data.name.size(); ++i){
     joint_handle[i]=found(clientID,joints[i],joint_handle[i],i+1);
+    if (joint_handle[i] == -1) {
+      ROS_ERROR("Failed to find joint handle for %s", joints[i]);
+    }
+
   }
   for (int i=0;i<data.name.size(); ++i){
-    simxSetJointTargetPosition(clientID, (simxInt) joint_handle[i], data.position.at(i), simx_opmode_oneshot);
-  }
+    simxInt result = simxSetJointTargetPosition(clientID, (simxInt) joint_handle[i], data.position.at(i), simx_opmode_oneshot);
+    if (result == simx_return_ok) {
+      ROS_INFO("Set position for joint %s to %f", joints[i], data.position.at(i));
+    } else {
+      ROS_ERROR("Failed to set position for joint %s. Error code: %d", joints[i], result);
+    }
 
+  }
+  for (size_t i = 0; i < joints.size(); ++i) {
+    delete[] joints[i];
+  }
 }
 
 int main(int argc, char **argv) 
 {
   string serverIP = "127.0.0.1";
-  int serverPort = 19999;
+  int serverPort = 20000;
 
   clientID=simxStart((simxChar*)serverIP.c_str(),serverPort,true,true,2000,5);
   
