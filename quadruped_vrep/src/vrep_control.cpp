@@ -60,6 +60,22 @@ void joint_callback(const sensor_msgs::JointState& data)
   for (size_t i = 0; i < joints.size(); ++i) {
     delete[] joints[i];
   }
+
+  // Obtén el handle del objeto "quadruped"
+  int quadrupedHandle;
+  if (simxGetObjectHandle(clientID, "dummy_joint", &quadrupedHandle, simx_opmode_blocking) != simx_return_ok) {
+      ROS_ERROR("No se pudo obtener el handle del objeto 'quadruped'");
+      simxFinish(clientID);
+  }
+
+  // Obtener la posición del objeto "quadruped"
+  float position[3];
+  if (simxGetObjectPosition(clientID, quadrupedHandle, -1, position, simx_opmode_blocking) == simx_return_ok) {
+      ROS_INFO("Posición del quadruped: x = %f, y = %f, z = %f", position[0], position[1], position[2]);
+  } else {
+      ROS_ERROR("No se pudo obtener la posición del objeto 'quadruped'");
+  }
+
 }
 
 int main(int argc, char **argv) 
