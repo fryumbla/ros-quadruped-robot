@@ -26,7 +26,7 @@ def angList(q1,q2):
     return Leg_angles
 
 L0 = 0.3
-L = 0.4
+L = 0.4 # largo de cada eslabon de una pierna
 Lgap = 0.7
 #IK calculation
 def cal_LIK(x,y,an):
