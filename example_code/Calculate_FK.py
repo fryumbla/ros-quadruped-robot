@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from sympy import *
 from time import time
 from mpmath import radians
