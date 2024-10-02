@@ -13,6 +13,7 @@ from sympy import *
 from time import time
 import math
 from geometry_msgs.msg import Pose
+from tf.transformations import quaternion_from_euler
 
 
 rospy.init_node("motion_control")
@@ -26,8 +27,22 @@ joints_states.name = ['front_right_joint1', 'front_right_joint2', 'front_left_jo
 
 L = L1 = L2 = float(0.4) # largo de cada eslabon de una pierna
 
+
+# Definir ángulos de Euler (roll, pitch, yaw) en radianes
+roll = 0  # Rotación alrededor del eje X
+pitch = 0 # Rotación alrededor del eje Y
+yaw = 0   # Rotación alrededor del eje Z
+
+# Convertir a cuaternión
+quaternion = quaternion_from_euler(roll, pitch, yaw)
+
 wpose = Pose()
 wpose.position.z = 0.6
+# Asignar al objeto wpose
+wpose.orientation.x = quaternion[0]
+wpose.orientation.y = quaternion[1]
+wpose.orientation.z = quaternion[2]
+wpose.orientation.w = quaternion[3]
 
 
 def start():
@@ -40,9 +55,18 @@ def start():
     joints_states.position = joint_position_state
     pub.publish(joints_states)
 
-def calculateIK_floor(x: Float = float(0.35), z: Float = float(0.5)):
-    q1 = 0 
-    q2 = 0 
+def set_orientation(wpose: Pose, pitch: Float):
+    """Allow us to change the pitch in R P Y, the rotation about "y" axis"""
+    pitch = math.radians(pitch)
+    quaternion = quaternion_from_euler(0, pitch, 0)
+    wpose.orientation.x = quaternion[0]
+    wpose.orientation.y = quaternion[1]
+    wpose.orientation.z = quaternion[2]
+    wpose.orientation.w = quaternion[3]
+    return wpose
+
+def calculateIK_floor(wpose: Pose):
+    z = wpose.position.z
 
     # beta  =-acos(((x**2) + (z**2) - 2*(L**2))/(2*(L**2))) # angulo del link1 con respecto al suelo
     # alpha = atan2(z,x) + atan2((sin(beta)), (1+cos(beta)))# angulo del link2 con respecto al link1
@@ -67,8 +91,6 @@ def calculateIK_floor(x: Float = float(0.35), z: Float = float(0.5)):
     # q2 = -beta
     # print(x)
 
-
-
     if(complex(alpha).imag != 0):
         print("alpha Impossible Angle")
     elif(complex(beta).imag != 0):
@@ -91,40 +113,49 @@ def calculateIK_floor(x: Float = float(0.35), z: Float = float(0.5)):
     joints_states.position = joint_position_state
     pub.publish(joints_states)
 
-
+def calculateIK_pitch(wpose: Pose):
+    zc = wpose.position.z
+    zl = zc - 0.11*sin(wpose.orientation.y)
 
 if __name__ == "__main__":
     print()
+
+    rospy.logwarn(wpose.orientation)
+    rospy.logwarn(set_orientation(wpose, 10).orientation)
+    rospy.logwarn(set_orientation(wpose, -10).orientation)
+    rospy.logwarn(set_orientation(wpose, 20).orientation)
+    rospy.logwarn(set_orientation(wpose, -20).orientation)
+    
     rospy.sleep(0.5)
 
-    calculateIK_floor(float(0.35), wpose.position.z)
-    wpose.position.z -= 0.1
-    rospy.sleep(4)
+    # calculateIK_floor(wpose)
+    # wpose.position.z -= 0.1
+    # rospy.sleep(2.5)
 
-    calculateIK_floor(float(0.35), wpose.position.z)
-    wpose.position.z -= 0.1
-    rospy.sleep(4)
+    # calculateIK_floor(wpose)
+    # wpose.position.z -= 0.1
+    # rospy.sleep(2.5)
 
-    calculateIK_floor(float(0.35), wpose.position.z)
-    wpose.position.z -= 0.1
-    rospy.sleep(4)
+    # calculateIK_floor(wpose)
+    # wpose.position.z -= 0.1
+    # rospy.sleep(2.5)
 
-    calculateIK_floor(float(0.35), wpose.position.z)
-    wpose.position.z -= 0.1
-    rospy.sleep(4)
+    # calculateIK_floor(wpose)
+    # wpose.position.z -= 0.1
+    # rospy.sleep(2.5)
 
-    calculateIK_floor(float(0.35), wpose.position.z)
-    wpose.position.z -= 0.1
-    rospy.sleep(4)
+    # calculateIK_floor(wpose)
+    # wpose.position.z -= 0.1
+    # rospy.sleep(2.5)
 
-    calculateIK_floor(float(0.35), wpose.position.z)
-    wpose.position.z -= 0.1
-    rospy.sleep(4)
+    # calculateIK_floor(wpose)
+    # wpose.position.z -= 0.1
+    # rospy.sleep(2.5)
 
-    calculateIK_floor(float(0.35), wpose.position.z)
-    wpose.position.z -= 0.1
-    rospy.sleep(4)
+    # calculateIK_floor(wpose)
+    # wpose.position.z -= 0.1
+    # rospy.sleep(2.5)
 
-    calculateIK_floor(float(0.35), wpose.position.z)
-    wpose.position.z -= 0.1
-    rospy.sleep(4)
+    # calculateIK_floor(wpose)
+    # wpose.position.z -= 0.1
+    # rospy.sleep(2.5)
