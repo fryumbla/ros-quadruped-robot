@@ -114,8 +114,25 @@ def calculateIK_floor(wpose: Pose):
     pub.publish(joints_states)
 
 def calculateIK_pitch(wpose: Pose):
-    zc = wpose.position.z
-    zl = zc - 0.11*sin(wpose.orientation.y)
+    z_c = wpose.position.z
+    z_l = z_c - 0.11*math.sin(wpose.orientation.y)
+    z_r = z_c + 0.11*math.sin(wpose.orientation.y)
+
+    alpha = math.radians(80)
+    beta_l = math.asin(z_l / (2 * L)) - alpha
+    x = L * (math.cos(alpha + beta_l))
+    q1 = (alpha + beta_l)
+    q2 = -beta_l
+
+    alpha = math.radians(80)
+    beta_r = math.asin(z_r / (2 * L)) - alpha
+    x = L * (math.cos(alpha + beta_r))
+    q3 = (alpha + beta_r)
+    q4 = -beta_r
+
+    joint_position_state=[q1,q2,q1,q2,q3,q4,q3,q4] # stand up principal
+    joints_states.position = joint_position_state
+    pub.publish(joints_states)
 
 if __name__ == "__main__":
     print()
