@@ -13,7 +13,7 @@ from sympy import *
 from time import time
 import math
 from geometry_msgs.msg import Pose
-from tf.transformations import quaternion_from_euler
+from tf.transformations import quaternion_from_euler, euler_from_quaternion
 
 
 rospy.init_node("motion_control")
@@ -26,6 +26,7 @@ joints_states.header.stamp = rospy.Time.now()
 joints_states.name = ['front_right_joint1', 'front_right_joint2', 'front_left_joint1','front_left_joint2', 'back_left_joint1', 'back_left_joint2', 'back_right_joint1','back_right_joint2']
 
 L = L1 = L2 = float(0.4) # largo de cada eslabon de una pierna
+center_to_side = 0.11    # distancia horizontal que hay entre el centro del torso hasta el primer joint de la pata
 
 
 # Definir ángulos de Euler (roll, pitch, yaw) en radianes
@@ -55,7 +56,7 @@ def start():
     joints_states.position = joint_position_state
     pub.publish(joints_states)
 
-def set_orientation(wpose: Pose, pitch: Float):
+def set_orientation(wpose: Pose, pitch: float):
     """Allow us to change the pitch in R P Y, the rotation about "y" axis"""
     pitch = math.radians(pitch)
     quaternion = quaternion_from_euler(0, pitch, 0)
@@ -113,20 +114,21 @@ def calculateIK_floor(wpose: Pose):
     joints_states.position = joint_position_state
     pub.publish(joints_states)
 
-def calculateIK_pitch(wpose: Pose):
+def calculateIK_pitch(wpose: Pose, pitch: float):
+    wpose = set_orientation(wpose, pitch)
     z_c = wpose.position.z
-    z_l = z_c - 0.11*math.sin(wpose.orientation.y)
-    z_r = z_c + 0.11*math.sin(wpose.orientation.y)
+    z_l = z_c - center_to_side*math.sin(math.radians(pitch))  
+    z_r = z_c + center_to_side*math.sin(math.radians(pitch))  
 
     alpha = math.radians(80)
     beta_l = math.asin(z_l / (2 * L)) - alpha
-    x = L * (math.cos(alpha + beta_l))
+    x_l = L * (math.cos(alpha + beta_l))
     q1 = (alpha + beta_l)
     q2 = -beta_l
 
     alpha = math.radians(80)
     beta_r = math.asin(z_r / (2 * L)) - alpha
-    x = L * (math.cos(alpha + beta_r))
+    x_r = L * (math.cos(alpha + beta_r))
     q3 = (alpha + beta_r)
     q4 = -beta_r
 
