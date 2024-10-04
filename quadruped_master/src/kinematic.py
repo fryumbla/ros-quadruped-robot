@@ -19,8 +19,8 @@ from tf.transformations import quaternion_from_euler, euler_from_quaternion
 rospy.init_node("motion_control")
 rate = rospy.Rate(10) # 10hz  
 pub = rospy.Publisher('/joint_states', JointState, queue_size=1)
-joints_states = JointState()
 
+joints_states = JointState()
 joints_states.header = Header()
 joints_states.header.stamp = rospy.Time.now()
 joints_states.name = ['front_right_joint1', 'front_right_joint2', 'front_left_joint1','front_left_joint2', 'back_left_joint1', 'back_left_joint2', 'back_right_joint1','back_right_joint2']
@@ -44,6 +44,9 @@ wpose.orientation.x = quaternion[0]
 wpose.orientation.y = quaternion[1]
 wpose.orientation.z = quaternion[2]
 wpose.orientation.w = quaternion[3]
+
+arm_l = Pose() # we make the math for a 2R articulated arm from the floor for each leg 
+arm_r = Pose() # we make the math for a 2R articulated arm from the floor for each leg
 
 
 def start():
@@ -85,6 +88,8 @@ def calculateIK_floor(wpose: Pose):
     q1 = (alpha + beta)
     q2 = -beta
 
+    arm_l.position.x = x
+    arm_r.position.x = x
     # alpha = math.radians(80)
     # x = z / math.tan(alpha)
     # beta = math.atan2(z, x) - alpha
@@ -101,32 +106,32 @@ def calculateIK_floor(wpose: Pose):
     elif(complex(q2).imag != 0):
         print("q2 Impossible Angle")
 
-    rospy.logwarn("Beta: {}, Alpha: {}, q1: {}, q2: {}, (X Z): {}  {}\n".format(
-        str(round(math.degrees(beta),  2)), 
-        str(round(math.degrees(alpha), 2)), 
-        str(round(math.degrees(q1), 2)), 
-        str(round(math.degrees(q2), 2)), 
-        str(round(0.4 * (math.cos(q1) + math.cos(q1 + q2)), 2)), 
-        str(round(0.4 * (math.sin(q1) + math.sin(q1 + q2)), 2))
-    ))
+    # rospy.logwarn("Beta: {}, Alpha: {}, q1: {}, q2: {}, (X Z): {}  {}\n".format(
+    #     str(round(math.degrees(beta),  2)), 
+    #     str(round(math.degrees(alpha), 2)), 
+    #     str(round(math.degrees(q1), 2)), 
+    #     str(round(math.degrees(q2), 2)), 
+    #     str(round(0.4 * (math.cos(q1) + math.cos(q1 + q2)), 2)), 
+    #     str(round(0.4 * (math.sin(q1) + math.sin(q1 + q2)), 2))
+    # ))
 
     joint_position_state=[q1,q2,q1,q2,q1,q2,q1,q2] # stand up principal
     joints_states.position = joint_position_state
     pub.publish(joints_states)
 
-def calculateIK_pitch(wpose: Pose, pitch: float):
+def calculateIK_pitch1(wpose: Pose, pitch: float):
     wpose = set_orientation(wpose, pitch)
     z_c = wpose.position.z
     z_l = z_c - center_to_side*math.sin(math.radians(pitch))  
     z_r = z_c + center_to_side*math.sin(math.radians(pitch))  
 
-    alpha = math.radians(80)
+    alpha = math.radians(60)
     beta_l = math.asin(z_l / (2 * L)) - alpha
     x_l = L * (math.cos(alpha + beta_l))
     q1 = (alpha + beta_l)
     q2 = -beta_l
 
-    alpha = math.radians(80)
+    alpha = math.radians(60)
     beta_r = math.asin(z_r / (2 * L)) - alpha
     x_r = L * (math.cos(alpha + beta_r))
     q3 = (alpha + beta_r)
@@ -136,24 +141,66 @@ def calculateIK_pitch(wpose: Pose, pitch: float):
     joints_states.position = joint_position_state
     pub.publish(joints_states)
 
+def calculateIK_pitch2(wpose: Pose, pitch: float):
+    wpose = set_orientation(wpose, pitch)
+    z_c = wpose.position.z
+    z_l = z_c - center_to_side*math.sin(math.radians(pitch))  
+    z_r = z_c + center_to_side*math.sin(math.radians(pitch))  
+
+
+    x_c = wpose.position.x
+    x_l = arm_l.position.x + center_to_side*(1 - math.cos(math.radians(pitch)))
+    x_r = arm_r.position.x - center_to_side*(1 - math.cos(math.radians(pitch)))
+
+    beta_l  =-acos(((x_l**2) + (z_l**2) - 2*(L**2))/(2*(L**2))) # angulo del link1 con respecto al suelo
+    alpha_l = atan2(z_l,x_l) + atan2((sin(beta_l)), (1+cos(beta_l)))# angulo del link2 con respecto al link1
+    q1 = -(alpha_l + beta_l)
+    q2 = -beta_l
+
+    beta_r  =-acos(((x_r**2) + (z_r**2) - 2*(L**2))/(2*(L**2))) # angulo del link1 con respecto al suelo
+    alpha_r = atan2(z_r,x_r) + atan2((sin(beta_r)), (1+cos(beta_r)))# angulo del link2 con respecto al link1
+    q3 = -(alpha_r + beta_r)
+    q4 = -beta_r
+
+    rospy.logwarn("Beta_l: {}, Alpha_l: {}, q1: {}, q2: {}, (X Z): {}  {}\nBeta_r: {}, Alpha_r: {}, q3: {}, q4: {}, (X Z): {}  {}\n".format(
+        str(round(math.degrees(beta_l),  2)), 
+        str(round(math.degrees(alpha_l), 2)), 
+        str(round(math.degrees(q1), 2)), 
+        str(round(math.degrees(q2), 2)), 
+        str(round(0.4 * (math.cos(q1) + math.cos(q1 + q2)), 4)), 
+        str(round(0.4 * (math.sin(q1) + math.sin(q1 + q2)), 4)), 
+        str(round(math.degrees(beta_r),  2)), 
+        str(round(math.degrees(alpha_r), 2)), 
+        str(round(math.degrees(q3), 2)), 
+        str(round(math.degrees(q4), 2)), 
+        str(round(0.4 * (math.cos(q3) + math.cos(q3 + q4)), 4)), 
+        str(round(0.4 * (math.sin(q3) + math.sin(q3 + q4)), 4))
+    ))
+
+    joint_position_state=[q1,q2,q1,q2,q3,q4,q3,q4] # stand up principal
+    joints_states.position = joint_position_state
+    pub.publish(joints_states)
+
+    print(z_c, z_l, z_r, x_c, x_l, x_r)
+
 if __name__ == "__main__":
     print()
 
-    rospy.logwarn(wpose.orientation)
-    rospy.logwarn(set_orientation(wpose, 10).orientation)
-    rospy.logwarn(set_orientation(wpose, -10).orientation)
-    rospy.logwarn(set_orientation(wpose, 20).orientation)
-    rospy.logwarn(set_orientation(wpose, -20).orientation)
+    rospy.logwarn(wpose)
+    # rospy.logwarn(set_orientation(wpose, 10).orientation)
+    # rospy.logwarn(set_orientation(wpose, -10).orientation)
+    # rospy.logwarn(set_orientation(wpose, 20).orientation)
+    # rospy.logwarn(set_orientation(wpose, -20).orientation)
     
     rospy.sleep(0.5)
 
     # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
     # rospy.sleep(2.5)
 
-    # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
-    # rospy.sleep(2.5)
+    calculateIK_pitch2(wpose, 10)
+    rospy.logwarn(wpose)
+    rospy.sleep(2.5)
+
 
     # calculateIK_floor(wpose)
     # wpose.position.z -= 0.1
