@@ -1,0 +1,16 @@
+quadruped:
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50  
+
+  quad_controller:
+    type: position_controllers/JointTrajectoryController
+    joints:
+      - front_right_joint1
+      - front_right_joint2
+      - front_left_joint1
+      - front_left_joint2
+      - back_left_joint1
+      - back_left_joint2
+      - back_right_joint1
+      - back_right_joint2

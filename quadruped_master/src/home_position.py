@@ -29,7 +29,7 @@ def main():
     robot = moveit_commander.RobotCommander()
 
     #Wait for RVIZ to initialize. This sleep is ONLY to allow Rviz to come up.
-    print "position"
+    print("position")
 
     #Instantiate a PlanningSceneInterface object. This object is an interface to the world surrounding the robot.
     global scene
