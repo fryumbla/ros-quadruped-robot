@@ -72,18 +72,18 @@ def set_orientation(wpose: Pose, pitch: float):
 def calculateIK_floor(wpose: Pose):
     z = wpose.position.z
 
-    # beta  =-acos(((x**2) + (z**2) - 2*(L**2))/(2*(L**2))) # angulo del link1 con respecto al suelo
-    # alpha = atan2(z,x) + atan2((sin(beta)), (1+cos(beta)))# angulo del link2 con respecto al link1
+    # beta  =-math.amath.cos(((x**2) + (z**2) - 2*(L**2))/(2*(L**2))) # angulo del link1 con respecto al suelo
+    # alpha = math.atan2(z,x) + math.atan2((math.sin(beta)), (1+math.cos(beta)))# angulo del link2 con respecto al link1
     # q1 = -(alpha + beta)
     # q2 = -beta
 
-    # alpha = atan2(-z, x) + acos( sqrt( (x**2) + (z**2) )/( 2*L ))
-    # beta  = -(acos(( (2*L**2) - ( (x**2) + (z**2) ) )/(2*L**2 )) - pi)
+    # alpha = math.atan2(-z, x) + math.amath.cos( sqrt( (x**2) + (z**2) )/( 2*L ))
+    # beta  = -(math.amath.cos(( (2*L**2) - ( (x**2) + (z**2) ) )/(2*L**2 )) - pi)
     # q1 = (alpha + beta)
     # q2 = beta
     
-    alpha = math.radians(80)
-    beta = math.asin(z / (2 * L)) - alpha
+    alpha = math.radians(110)
+    beta = math.amath.sin(z / (2 * L)) - alpha
     x = L * (math.cos(alpha + beta))
     q1 = (alpha + beta)
     q2 = -beta
@@ -92,7 +92,7 @@ def calculateIK_floor(wpose: Pose):
     arm_r.position.x = x
     # alpha = math.radians(80)
     # x = z / math.tan(alpha)
-    # beta = math.atan2(z, x) - alpha
+    # beta = math.math.atan2(z, x) - alpha
     # q1 = (alpha + beta)
     # q2 = -beta
     # print(x)
@@ -126,13 +126,13 @@ def calculateIK_pitch1(wpose: Pose, pitch: float):
     z_r = z_c + center_to_side*math.sin(math.radians(pitch))  
 
     alpha = math.radians(60)
-    beta_l = math.asin(z_l / (2 * L)) - alpha
+    beta_l = math.amath.sin(z_l / (2 * L)) - alpha
     x_l = L * (math.cos(alpha + beta_l))
     q1 = (alpha + beta_l)
     q2 = -beta_l
 
     alpha = math.radians(60)
-    beta_r = math.asin(z_r / (2 * L)) - alpha
+    beta_r = math.amath.sin(z_r / (2 * L)) - alpha
     x_r = L * (math.cos(alpha + beta_r))
     q3 = (alpha + beta_r)
     q4 = -beta_r
@@ -152,13 +152,13 @@ def calculateIK_pitch2(wpose: Pose, pitch: float):
     x_l = arm_l.position.x + center_to_side*(1 - math.cos(math.radians(pitch)))
     x_r = arm_r.position.x - center_to_side*(1 - math.cos(math.radians(pitch)))
 
-    beta_l  =-acos(((x_l**2) + (z_l**2) - 2*(L**2))/(2*(L**2))) # angulo del link1 con respecto al suelo
-    alpha_l = atan2(z_l,x_l) + atan2((sin(beta_l)), (1+cos(beta_l)))# angulo del link2 con respecto al link1
+    beta_l  =-math.amath.cos(((x_l**2) + (z_l**2) - 2*(L**2))/(2*(L**2))) # angulo del link1 con respecto al suelo
+    alpha_l = math.atan2(z_l,x_l) + math.atan2((math.sin(beta_l)), (1+math.cos(beta_l)))# angulo del link2 con respecto al link1
     q1 = -(alpha_l + beta_l)
     q2 = -beta_l
 
-    beta_r  =-acos(((x_r**2) + (z_r**2) - 2*(L**2))/(2*(L**2))) # angulo del link1 con respecto al suelo
-    alpha_r = atan2(z_r,x_r) + atan2((sin(beta_r)), (1+cos(beta_r)))# angulo del link2 con respecto al link1
+    beta_r  =-math.amath.cos(((x_r**2) + (z_r**2) - 2*(L**2))/(2*(L**2))) # angulo del link1 con respecto al suelo
+    alpha_r = math.atan2(z_r,x_r) + math.atan2((math.sin(beta_r)), (1+math.cos(beta_r)))# angulo del link2 con respecto al link1
     q3 = -(alpha_r + beta_r)
     q4 = -beta_r
 
@@ -197,31 +197,31 @@ if __name__ == "__main__":
     # calculateIK_floor(wpose)
     # rospy.sleep(2.5)
 
-    calculateIK_pitch2(wpose, 10)
-    rospy.logwarn(wpose)
+    # calculateIK_pitch2(wpose, 10)
+    # rospy.logwarn(wpose)
+    # rospy.sleep(2.5)
+
+
+    calculateIK_floor(wpose)
+    wpose.position.z -= 0.1
     rospy.sleep(2.5)
 
+    calculateIK_floor(wpose)
+    wpose.position.z -= 0.1
+    rospy.sleep(2.5)
 
-    # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
-    # rospy.sleep(2.5)
+    calculateIK_floor(wpose)
+    wpose.position.z -= 0.1
+    rospy.sleep(2.5)
 
-    # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
-    # rospy.sleep(2.5)
+    calculateIK_floor(wpose)
+    wpose.position.z -= 0.1
+    rospy.sleep(2.5)
 
-    # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
-    # rospy.sleep(2.5)
+    calculateIK_floor(wpose)
+    wpose.position.z -= 0.1
+    rospy.sleep(2.5)
 
-    # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
-    # rospy.sleep(2.5)
-
-    # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
-    # rospy.sleep(2.5)
-
-    # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
-    # rospy.sleep(2.5)
+    calculateIK_floor(wpose)
+    wpose.position.z -= 0.1
+    rospy.sleep(2.5)
