@@ -68,7 +68,7 @@ def gait(length):
 
 def main():
     rospy.init_node("motion_control")
-    pub = rospy.Publisher('joint_states', JointState, queue_size=1)
+    pub = rospy.Publisher('joint_goals', JointState, queue_size=1)
     joints_states = JointState()
 
     stand50j14=0.41944732836554044
@@ -136,6 +136,9 @@ def main():
                 pub.publish(joints_states)
                 current_position = joint_position_state
                 rospy.sleep(0.01)
+        if (number ==4):
+
+            pass
 
 
 
