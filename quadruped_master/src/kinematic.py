@@ -16,7 +16,7 @@ from geometry_msgs.msg import Pose
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 
 
-rospy.init_node("motion_control")
+rospy.init_node("kinematic_control_node")
 rate = rospy.Rate(10) # 10hz  
 pub = rospy.Publisher('/joint_states', JointState, queue_size=1)
 
@@ -81,15 +81,6 @@ def calculateIK_floor(wpose: Pose):
     # beta  = -(math.cos(( (2*L**2) - ( (x**2) + (z**2) ) )/(2*L**2 )) - pi)
     # q1 = (alpha + beta)
     # q2 = beta
-    
-    alpha = math.radians(110)
-    beta = math.sin(z / (2 * L)) - alpha
-    x = L * (math.cos(alpha + beta))
-    q1 = (alpha + beta)
-    q2 = -beta
-
-    arm_l.position.x = x
-    arm_r.position.x = x
 
     # alpha = math.radians(80)
     # x = z / math.tan(alpha)
@@ -98,14 +89,33 @@ def calculateIK_floor(wpose: Pose):
     # q2 = -beta
     # print(x)
 
-    if(complex(alpha).imag != 0):
-        print("alpha Impossible Angle")
-    elif(complex(beta).imag != 0):
-        print("beta Impossible Angle")
-    elif(complex(q1).imag != 0):
-        print("q1 Impossible Angle")
-    elif(complex(q2).imag != 0):
-        print("q2 Impossible Angle")
+    if z < 0.7:
+        alpha = math.radians(85)
+        beta = math.sin(z / (2 * L)) - alpha
+        x = L * (math.cos(alpha + beta))
+        q1 = (alpha + beta)
+        q2 = -beta
+
+        arm_l.position.x = x
+        arm_r.position.x = x
+
+        if(complex(alpha).imag != 0):
+            print("alpha Impossible Angle")
+        elif(complex(beta).imag != 0):
+            print("beta Impossible Angle")
+        elif(complex(q1).imag != 0):
+            print("q1 Impossible Angle")
+        elif(complex(q2).imag != 0):
+            print("q2 Impossible Angle")
+        else:
+            joint_position_state=[q1,q2,q1,q2,q1,q2,q1,q2] # stand up principal
+            joints_states.position = joint_position_state
+            pub.publish(joints_states)
+
+    else:
+        wpose.position.z = 0.65
+        rospy.logwarn(wpose.position.z)
+
 
     # rospy.logwarn("Beta: {}, Alpha: {}, q1: {}, q2: {}, (X Z): {}  {}\n".format(
     #     str(round(math.degrees(beta),  2)), 
@@ -116,23 +126,19 @@ def calculateIK_floor(wpose: Pose):
     #     str(round(0.4 * (math.sin(q1) + math.sin(q1 + q2)), 2))
     # ))
 
-    joint_position_state=[q1,q2,q1,q2,q1,q2,q1,q2] # stand up principal
-    joints_states.position = joint_position_state
-    pub.publish(joints_states)
-
 def calculateIK_pitch1(wpose: Pose, pitch: float):
     wpose = set_orientation(wpose, pitch)
     z_c = wpose.position.z
     z_l = z_c - center_to_side*math.sin(math.radians(pitch))  
     z_r = z_c + center_to_side*math.sin(math.radians(pitch))  
 
-    alpha = math.radians(110)
+    alpha = math.radians(85)
     beta_l = math.sin(z_l / (2 * L)) - alpha
     x_l = L * (math.cos(alpha + beta_l))
     q1 = (alpha + beta_l)
     q2 = -beta_l
 
-    alpha = math.radians(110)
+    alpha = math.radians(85)
     beta_r = math.sin(z_r / (2 * L)) - alpha
     x_r = L * (math.cos(alpha + beta_r))
     q3 = (alpha + beta_r)
@@ -233,46 +239,11 @@ def calculateIK_pitch(wpose: Pose, pitch: float):
 
 if __name__ == "__main__":
     print()
-
-    rospy.logwarn(wpose)
-    # rospy.logwarn(set_orientation(wpose, 10).orientation)
-    # rospy.logwarn(set_orientation(wpose, -10).orientation)
-    # rospy.logwarn(set_orientation(wpose, 20).orientation)
-    # rospy.logwarn(set_orientation(wpose, -20).orientation)
-    
     rospy.sleep(0.5)
 
     calculateIK_floor(wpose)
     rospy.sleep(2.5)
 
-    calculateIK_pitch(wpose, 50)
-    rospy.logwarn(wpose)
-    rospy.sleep(2.5)
-
-
-    # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
-    # rospy.sleep(2.5)
-
-    # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
-    # rospy.sleep(2.5)
-
-    # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
-    # rospy.sleep(2.5)
-
-    # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
-    # rospy.sleep(2.5)
-
-    # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
-    # rospy.sleep(2.5)
-
-    # calculateIK_floor(wpose)
-    # wpose.position.z -= 0.1
-    # rospy.sleep(2.5)
 
     while not rospy.is_shutdown():
 
@@ -287,22 +258,27 @@ if __name__ == "__main__":
             wpose.orientation.w = 1
 
             calculateIK_floor(wpose)
-            rospy.sleep(2.5)
+            rospy.sleep(1)
 
-        if (number==2):
-            # Down
-            wpose.position.z -= 0.2
-            calculateIK_floor(wpose)
-            rospy.sleep(2.5)
-
-        if (number ==3):
+        elif (number==2):
             # Up
-            wpose.position.z += 0.2
+            wpose.position.z += 0.1
             calculateIK_floor(wpose)
-            rospy.sleep(2.5)
+            rospy.sleep(1)
 
-        if (number ==4):
-        
+        elif (number ==3):
+            # Down
+            wpose.position.z -= 0.1
+            calculateIK_floor(wpose)
+            rospy.sleep(1)
 
-        if (number ==4):
+        elif (number ==4):
+            calculateIK_pitch2(wpose, 100)
+            rospy.sleep(1)
+
+        elif (number ==5):
+            calculateIK_pitch1(wpose, -10)
+            rospy.sleep(1)
+
+        else:
             pass
