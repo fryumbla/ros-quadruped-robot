@@ -17,7 +17,7 @@ int found(int a,char* b,int c,int d)
     cout << "no joint " << d << " found " << b<< std::endl;
   }
   else{
-    cout << "joint " << d << " found: "  << b << std::endl;
+    // cout << "joint " << d << " found: "  << b << std::endl;
     return c;
   }
   return -1;
@@ -33,7 +33,7 @@ void joint_callback(const sensor_msgs::JointState& data)
     char *cstr = new char[data.name.at(i).length() + 1];
     strcpy(cstr, data.name.at(i).c_str());
     joints.push_back(cstr);
-    ROS_INFO("Joint name: %s", cstr);  // Agregar mensaje de depuración
+    // ROS_INFO("Joint name: %s", cstr);  // Agregar mensaje de depuración
   }
 
   std::vector<int> joint_handle;
@@ -51,7 +51,7 @@ void joint_callback(const sensor_msgs::JointState& data)
   for (int i=0;i<data.name.size(); ++i){
     simxInt result = simxSetJointTargetPosition(clientID, (simxInt) joint_handle[i], data.position.at(i), simx_opmode_oneshot);
     if (result == simx_return_ok) {
-      ROS_INFO("Set position for joint %s to %f", joints[i], data.position.at(i));
+      // ROS_INFO("Set position for joint %s to %f", joints[i], data.position.at(i));
     } else {
       ROS_ERROR("Failed to set position for joint %s. Error code: %d", joints[i], result);
     }
