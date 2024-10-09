@@ -69,8 +69,9 @@ def set_orientation(wpose: Pose, pitch: float):
     wpose.orientation.w = quaternion[3]
     return wpose
 
-def calculateIK_floor(wpose: Pose):
-    z = wpose.position.z
+def calculateIK_floor_z(wpose: Pose, desp_z: float):
+    z = wpose.position.z + desp_z
+    wpose.position.z += desp_z
 
     # beta  =-math.cos(((x**2) + (z**2) - 2*(L**2))/(2*(L**2))) # angulo del link1 con respecto al suelo
     # alpha = math.atan2(z,x) + math.atan2((math.sin(beta)), (1+math.cos(beta)))# angulo del link2 con respecto al link1
@@ -116,6 +117,39 @@ def calculateIK_floor(wpose: Pose):
         wpose.position.z = 0.65
         rospy.logwarn(wpose.position.z)
 
+
+    # rospy.logwarn("Beta: {}, Alpha: {}, q1: {}, q2: {}, (X Z): {}  {}\n".format(
+    #     str(round(math.degrees(beta),  2)), 
+    #     str(round(math.degrees(alpha), 2)), 
+    #     str(round(math.degrees(q1), 2)), 
+    #     str(round(math.degrees(q2), 2)), 
+    #     str(round(0.4 * (math.cos(q1) + math.cos(q1 + q2)), 2)), 
+    #     str(round(0.4 * (math.sin(q1) + math.sin(q1 + q2)), 2))
+    # ))
+
+def calculateIK_floor_x(wpose: Pose, desp_x: float):
+    arm_l.position.x += desp_x
+    arm_r.position.x -= desp_x
+
+    x_l = arm_l.position.x
+    x_r = arm_r.position.x
+    wpose.position.x += desp_x
+
+    z = wpose.position.z
+
+    beta_l  =-math.cos(((x_l**2) + (z**2) - 2*(L**2))/(2*(L**2))) # angulo del link1 con respecto al suelo
+    alpha_l = math.atan2(z,x_l) + math.atan2((math.sin(beta_l)), (1+math.cos(beta_l)))# angulo del link2 con respecto al link1
+    q1 = -(alpha_l + beta_l)
+    q2 = -beta_l
+
+    beta_r  =-math.cos(((x_r**2) + (z**2) - 2*(L**2))/(2*(L**2))) # angulo del link1 con respecto al suelo
+    alpha_r = math.atan2(z,x_r) + math.atan2((math.sin(beta_r)), (1+math.cos(beta_r)))# angulo del link2 con respecto al link1
+    q3 = -(alpha_r + beta_r)
+    q4 = -beta_r
+
+    joint_position_state=[q1,q2,q1,q2,q3,q4,q3,q4] # stand up principal
+    joints_states.position = joint_position_state
+    pub.publish(joints_states)
 
     # rospy.logwarn("Beta: {}, Alpha: {}, q1: {}, q2: {}, (X Z): {}  {}\n".format(
     #     str(round(math.degrees(beta),  2)), 
@@ -241,7 +275,11 @@ if __name__ == "__main__":
     print()
     rospy.sleep(0.5)
 
-    calculateIK_floor(wpose)
+    joint_position_state=[0.6816387600233341, 0.8018911041718461, 0.6816387600233341, 0.8018911041718461, 0.6816387600233341, 0.8018911041718461, 0.6816387600233341, 0.8018911041718461]
+    joints_states.position = joint_position_state
+    pub.publish(joints_states)
+    rospy.sleep(1)
+
     rospy.sleep(2.5)
 
 
@@ -249,36 +287,45 @@ if __name__ == "__main__":
 
         number = int(input ("Enter number: "))
 
-        if (number==1):
+        if (number == 0):
             # Home
-            wpose.position.z    = 0.6
+            wpose.position.z    = 0.65
             wpose.orientation.x = 0
             wpose.orientation.y = 0
             wpose.orientation.z = 0
             wpose.orientation.w = 1
 
-            calculateIK_floor(wpose)
+            joint_position_state=[0.6816387600233341, 0.8018911041718461, 0.6816387600233341, 0.8018911041718461, 0.6816387600233341, 0.8018911041718461, 0.6816387600233341, 0.8018911041718461]
+            joints_states.position = joint_position_state
+            pub.publish(joints_states)
             rospy.sleep(1)
 
-        elif (number==2):
+        elif (number == 1):
             # Up
-            wpose.position.z += 0.1
-            calculateIK_floor(wpose)
+            calculateIK_floor_z(wpose, 0.1)
             rospy.sleep(1)
 
-        elif (number ==3):
+        elif (number == 2):
             # Down
-            wpose.position.z -= 0.1
-            calculateIK_floor(wpose)
+            calculateIK_floor_z(wpose, -0.1)
             rospy.sleep(1)
 
-        elif (number ==4):
-            calculateIK_pitch2(wpose, 100)
+        elif (number == 3):
+            calculateIK_pitch2(wpose, 20)
             rospy.sleep(1)
 
-        elif (number ==5):
+        elif (number == 4):
             calculateIK_pitch1(wpose, -10)
             rospy.sleep(1)
 
+        elif (number == 5):
+            calculateIK_floor_x(wpose, 0.1)
+            rospy.sleep(1)
+
+        elif (number == 6):
+            calculateIK_floor_x(wpose, -0.1)
+            rospy.sleep(1)
+
+        
         else:
             pass
