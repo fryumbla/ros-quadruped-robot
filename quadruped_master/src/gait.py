@@ -4,6 +4,7 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 import numpy as np
 import math
+from math import pi, cos, sin, acos, atan2
 
 current_position = [0,0,0,0,0,0,0,0]
 
@@ -31,30 +32,42 @@ def IK(pos_x, pos_z):
         theta2 = current_position[1]
 
     else:
-        theta2 = np.arccos(np.clip(( (pos_x**2) + (pos_z**2) - (l1**2) - (l2**2) ) / (2*l1*l2), -1, 1 ))
-        theta1 = -(np.arctan(pos_z/pos_x) - np.arctan((l2*np.sin(-theta2))/(l1+l2*np.cos(-theta2))))
-    return (theta1,theta2)
+        #theta2 = np.arccos(np.clip(((pos_x**2) + (pos_z**2) - (l1**2) - (l2**2) ) / (2*l1*l2), -1, 1 ))
+        #theta1 = np.arctan2(pos_z,pos_x) - np.arctan((l2*np.sin(theta2))/(l1+(l2*np.cos(theta2))))
+        cosbeta = ( pos_x ** 2 + pos_z ** 2 - l1 ** 2 - l2 ** 2 ) / ( 2.0 * l1 * l2 )
+        beta1 = acos( cosbeta )
+        beta2 = -beta1
+        A  , B = l1 + l2 * cosbeta, l2 * sin( beta1 )
+        alpha1 = -atan2( pos_z * A + pos_x * B, pos_x * A - pos_z * B )
+        alpha2 = atan2( pos_z * A - pos_x * B, pos_x * A + pos_z * B )
+        #print("beta1:alpha1, beta2:alpha2")
+        #print("(",alpha1,beta1,"),(",alpha2,beta2, ")")
+    return alpha1,beta1
 
+def angles_new_arm(theta1, theta2):
+    
 
-def plan_circle( center_x : float , center_y : float , r : float , theta_o : float  , theta_f : float , sentido_x : bool, sentido_y : bool):
+    pass
+
+def plan_circle( center_x : float , center_y : float , r : float , theta_o : float  , theta_f : float , sentido_x : bool, sentido_y : bool, steeps):
     pos = []
     if (sentido_x and sentido_y):
-        for theta in range(theta_o, theta_f + 1, 2):
+        for theta in range(theta_o, theta_f + 1, steeps):
             position_z = center_y + r*math.sin(theta*math.pi/180)
             position_x = center_x + r*math.cos(theta*math.pi/180)
             pos.append((position_x,position_z))
     elif (not(sentido_x) and sentido_y):
-        for theta in range(theta_o, theta_f + 1, 2):
+        for theta in range(theta_o, theta_f + 1, steeps):
             position_z = center_y + r*math.sin(theta*math.pi/180)
             position_x = center_x - r*math.cos(theta*math.pi/180)
             pos.append((position_x,position_z))
     elif (sentido_x and not(sentido_y)):
-        for theta in range(theta_o, theta_f + 1, 2):
+        for theta in range(theta_o, theta_f + 1, steeps):
             position_z = center_y - r*math.sin(theta*math.pi/180)
             position_x = center_x + r*math.cos(theta*math.pi/180)
             pos.append((position_x,position_z))
     else:
-        for theta in range(theta_o, theta_f + 1, 2):
+        for theta in range(theta_o, theta_f + 1, steeps):
             position_z = center_y - r*math.sin(theta*math.pi/180)
             position_x = center_x - r*math.cos(theta*math.pi/180)
             pos.append((position_x,position_z))
@@ -68,11 +81,16 @@ def gait(length):
 
 def main():
     rospy.init_node("motion_control")
+    #pub = rospy.Publisher('joint_states', JointState, queue_size=1)
     pub = rospy.Publisher('joint_goals', JointState, queue_size=1)
     joints_states = JointState()
 
     stand50j14=0.41944732836554044
     stand50j58=1.719784407902978
+
+
+    stand_1=0.41944732836554044
+    stand_2=1.2
 
     stand65j14=0.7592545338404827
     stand65j58=1.169485889801056
@@ -114,7 +132,7 @@ def main():
             joints_states.position = joint_position_state
             pub.publish(joints_states)
             rospy.sleep(time)
-            joint_position_state=[stand50j14, stand50j58,stand50j14,stand50j58,stand50j14,stand50j58,stand50j14,stand50j58] # stand up principal
+            joint_position_state=[stand_1, stand_2,stand_1,stand_2,stand_1,stand_2,stand_1,stand_2] # stand up principal
             joints_states.position = joint_position_state
             pub.publish(joints_states)
             current_position = joint_position_state
@@ -125,30 +143,42 @@ def main():
             current_position = joint_position_state
             #1rst leg gait
             first_position = FK(current_position[0], current_position[1])
-            print(first_position)
-            posd = plan_circle(first_position[0]+r, first_position[1], r, 0,180, False, True)
-            print(posd)
+            print("first position: ",first_position)
+            posd = plan_circle(first_position[0]+r, first_position[1], r, 0,180, False, True, 10)
             for p in posd:
+                print("Position x,z: ",p)
                 j = IK(p[0], p[1])
-                print(j)
-                joint_position_state=[j[0], j[1],stand50j14,stand50j58,stand50j14,stand50j58,stand50j14,stand50j58] # stand up principal
+                print("Joints: ",j)
+                joint_position_state=[j[0], j[1] ,stand_1,stand_2,stand_1,stand_2,stand_1,stand_2] # stand up principal
                 joints_states.position = joint_position_state
                 pub.publish(joints_states)
                 current_position = joint_position_state
-                rospy.sleep(0.01)
+                rospy.sleep(0.5)
+
         if (number ==4):
-
+            r =0.1
+            print("Back Gait")
+            current_position = joint_position_state
+            #1rst leg gait
+            first_position = FK(current_position[4], current_position[5])
+            print("first position: ",first_position)
+            posd = plan_circle(first_position[0]-r, first_position[1], r, 0,180, True, True, 10)
+            
+            for p in posd:
+                print("Position x,z: ",p)
+                j = IK(p[0], p[1])
+                print("Joints: ",j)
+                joint_position_state=[stand_1,stand_2 ,stand_1,stand_2,j[0],j[1],stand_1,stand_2] # stand up principal
+                joints_states.position = joint_position_state
+                pub.publish(joints_states)
+                current_position = joint_position_state
+                rospy.sleep(0.5)
             pass
-
-
-
-
-
 
 
 
 if __name__ == '__main__':
     main()
-    #print(FK(1.57 , 0))
-    #print(IK(0.0006370613685866107, -0.7999997463454678))
+    #a = FK(1.57,0.785)
+    #print(IK(a[0],a[1]))
     #gait(1)
