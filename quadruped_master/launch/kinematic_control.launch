@@ -1,0 +1,6 @@
+<launch>
+
+    <node name="kinematic_control_node" pkg="quadruped_master" type="kinematic.py" respawn="false" output="screen">
+    </node>
+
+</launch>
