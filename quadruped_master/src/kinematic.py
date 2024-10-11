@@ -92,7 +92,7 @@ def calculateIK_floor_z(wpose: Pose, desp_z: float):
 
     if z < 0.7:
         alpha = math.radians(85)
-        beta = math.sin(z / (2 * L)) - alpha
+        beta = math.asin(z / (2 * L)) - alpha
         x = L * (math.cos(alpha + beta))
         q1 = (alpha + beta)
         q2 = -beta
@@ -151,14 +151,20 @@ def calculateIK_floor_x(wpose: Pose, desp_x: float):
     joints_states.position = joint_position_state
     pub.publish(joints_states)
 
-    # rospy.logwarn("Beta: {}, Alpha: {}, q1: {}, q2: {}, (X Z): {}  {}\n".format(
-    #     str(round(math.degrees(beta),  2)), 
-    #     str(round(math.degrees(alpha), 2)), 
-    #     str(round(math.degrees(q1), 2)), 
-    #     str(round(math.degrees(q2), 2)), 
-    #     str(round(0.4 * (math.cos(q1) + math.cos(q1 + q2)), 2)), 
-    #     str(round(0.4 * (math.sin(q1) + math.sin(q1 + q2)), 2))
-    # ))
+    rospy.logwarn("Beta_l: {}, Alpha_l: {}, q1: {}, q2: {}, (X Z): {}  {}\nBeta_r: {}, Alpha_r: {}, q3: {}, q4: {}, (X Z): {}  {}\n".format(
+        str(round(math.degrees(beta_l),  2)), 
+        str(round(math.degrees(alpha_l), 2)), 
+        str(round(math.degrees(q1), 2)), 
+        str(round(math.degrees(q2), 2)), 
+        str(round(0.4 * (math.cos(q1) + math.cos(q1 + q2)), 4)), 
+        str(round(0.4 * (math.sin(q1) + math.sin(q1 + q2)), 4)), 
+        str(round(math.degrees(beta_r),  2)), 
+        str(round(math.degrees(alpha_r), 2)), 
+        str(round(math.degrees(q3), 2)), 
+        str(round(math.degrees(q4), 2)), 
+        str(round(0.4 * (math.cos(q3) + math.cos(q3 + q4)), 4)), 
+        str(round(0.4 * (math.sin(q3) + math.sin(q3 + q4)), 4))
+    ))
 
 def calculateIK_pitch1(wpose: Pose, pitch: float):
     wpose = set_orientation(wpose, pitch)
