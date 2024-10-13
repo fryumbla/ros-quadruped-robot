@@ -12,4 +12,9 @@
 	<!-- <node name="rviz" pkg="rviz" type="rviz"/> -->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find quadruped_description)/config/configuration.rviz" required="true" />
 
+  <node
+    name="joint_state_publisher_gui"
+    pkg="joint_state_publisher_gui"
+    type="joint_state_publisher_gui" />
+
 </launch>
