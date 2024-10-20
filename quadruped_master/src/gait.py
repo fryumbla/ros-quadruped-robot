@@ -77,7 +77,7 @@ def plan_circle( center_x : float , center_y : float , r : float , theta_o : flo
     return pos
 
 def gait(foot_number, length): #Front foot? True or False
-    steps = 20
+    steps = 5
     global current_position
     n = 2*foot_number -1
     joint_position_state = current_position
@@ -108,7 +108,7 @@ def gait(foot_number, length): #Front foot? True or False
         joints_states.position = joint_position_state
         pub.publish(joints_states)
         current_position = joint_position_state
-        rospy.sleep(0.8)
+        rospy.sleep(0.05)
     pass
 
 def dummy_traslation(x,z):
@@ -141,13 +141,51 @@ def dummy_traslation(x,z):
     rospy.sleep(0.5)
     pass
 
+def dummy_rotation(angle):
+    d = 0.22 #Distancia del dummy entra pata y pata
+    angle = - np.pi*angle/180
+    z = (d)*sin(angle)
+    x = -(d)*(cos(angle)) + d
+    #z = 0.22
+    #x = 0.22
+    #FRONT
+    print("Dummy rotation")
+    global current_position
+    first_position = FK(current_position[0], current_position[1],True)
+    #print("first position: ", first_position)
+    base_new_arm = angles_new_arm(current_position[0],current_position[1])
+    point_new_arm = FK(base_new_arm[0],base_new_arm[1],False)
+    new_point = (point_new_arm[0]-x, point_new_arm[1]-z)
+    print("first position new arm: ",point_new_arm)
+    print("new point: ",new_point)
+    new_angles = IK(new_point[0],new_point[1],False)
+    angles = angles_buddy_arm(new_angles[0],new_angles[1])
+    #print("Angles new arm: ",new_angles )
+    print("Angles buddy arm: ",angles )
+
+    #BACK
+    base_new_arm_b = angles_new_arm(current_position[0],current_position[1])
+    point_new_arm_b = FK(base_new_arm_b[0],base_new_arm_b[1],False)
+    new_point_b = (point_new_arm_b[0]+x, point_new_arm_b[1]+z)
+    print("first position new arm: ",point_new_arm_b)
+    print("new point: ",new_point_b)
+    new_angles_b = IK(new_point_b[0],new_point_b[1],False)
+    angles_b = angles_buddy_arm(new_angles_b[0],new_angles_b[1])
+
+    joint_position_state=[angles[0],angles[1] ,angles[0],angles[1],angles_b[0],angles_b[1],angles_b[0],angles_b[1]] # stand up principal
+    joints_states.position = joint_position_state
+    pub.publish(joints_states)
+    current_position = joint_position_state
+    rospy.sleep(0.5)
+    pass
+
 def main():
     stand50j14=0.41944732836554044
     stand50j58=1.719784407902978
 
 
-    stand_1=0.41944732836554044
-    stand_2=1.2
+    stand_1=0.3
+    stand_2=1.4
 
     stand65j14=0.7592545338404827
     stand65j58=1.169485889801056
@@ -176,8 +214,8 @@ def main():
         imp = input ("Enter number: ")
         number = int(imp)
         if (number==1):
-            print("Abajo")
-            joint_position_state=[0,0,0,0,0,0,0,0]
+            print("Stand")
+            joint_position_state=[stand_1, stand_2,stand_1,stand_2,stand_1,stand_2,stand_1,stand_2] # stand up principal
             joints_states.position = joint_position_state
             pub.publish(joints_states)
             current_position = joint_position_state
@@ -195,40 +233,56 @@ def main():
             current_position = joint_position_state
 
         if (number ==3):
-            print("Front Gait")
-            #1rst leg gait
-            gait(1,0.1)
-            gait(2,0.1)
-            
+
+            print("traslation x")
             dummy_traslation(0.1,0)
-
-            gait(3,0.1)
-            gait(4,0.1)
-
-            dummy_traslation(0.1,0)
-            rospy.sleep(2)
-
-            print("Retrocediendo")
-            gait(1,-0.1)
-            gait(2,-0.1)
-
-            dummy_traslation(-0.1,0)
-            
-            gait(3,-0.1)
-            gait(4,-0.1)
-
-            dummy_traslation(-0.1,0)
-
-            rospy.sleep(2)
-
-            dummy_traslation(0,+0.1)
             rospy.sleep(1)
 
-            dummy_traslation(0,-0.2)
+            # print("traslation z")
 
-            rospy.sleep(1)
+            # dummy_traslation(0,-0.1)
+            # rospy.sleep(1)
 
-            dummy_traslation(0,+0.2)
+            # print("Rotation ",20)
+            # dummy_rotation(20)
+            # rospy.sleep(1)
+        
+            # print("Traslation z")
+            # dummy_traslation(0,-0.2)
+            # rospy.sleep(1)
+        
+            # print("Front Gait")
+            # #1rst leg gait
+            # gait(1,0.1)
+            # gait(2,0.1)
+            
+            # dummy_traslation(0.1,0)
+
+            # gait(3,0.1)
+            # gait(4,0.1)
+
+            # dummy_traslation(0.1,0)
+            # rospy.sleep(2)
+
+            # print("Retrocediendo")
+            # gait(1,-0.1)
+            # gait(2,-0.1)
+
+            # dummy_traslation(-0.1,0)
+            
+            # gait(3,-0.1)
+            # gait(4,-0.1)
+
+            # rospy.sleep(2)
+
+            # dummy_traslation(0,+0.1)
+            # rospy.sleep(1)
+
+            # dummy_traslation(0,-0.2)
+
+            # rospy.sleep(1)
+
+            # dummy_traslation(0,+0.2)
             pass
 
         if (number ==4):
@@ -267,7 +321,7 @@ def main():
 if __name__ == '__main__':
     rospy.init_node("motion_control")
     #pub = rospy.Publisher('joint_states', JointState, queue_size=1)
-    pub = rospy.Publisher('joint_goals', JointState, queue_size=1)
+    pub = rospy.Publisher('joint_states', JointState, queue_size=1)
     joints_states = JointState()
 
     main()
