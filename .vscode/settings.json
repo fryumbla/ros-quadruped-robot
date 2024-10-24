@@ -18,5 +18,6 @@
         "string_view": "cpp",
         "initializer_list": "cpp",
         "utility": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "/home/erick/quad_ws/src/ros-quadruped-robot/quadruped_vrep"
 }
