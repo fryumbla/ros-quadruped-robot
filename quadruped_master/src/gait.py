@@ -221,15 +221,25 @@ def movement(speed):
         dummy_traslation(-length/2,0,time_delay)
         rospy.sleep(0.05)
         print("Front Gait")
-        #1rst leg gait
-        gait(1,length,time_delay)
-        gait(2,length,time_delay)
-        
-        dummy_traslation(4*length/2,0, time_delay)
-        rospy.sleep(1)
+        if speed>0: #Cuando Avanza
+            gait(1,length,time_delay)
+            gait(2,length,time_delay)
+            
+            dummy_traslation(4*length/2,0, time_delay)
+            rospy.sleep(1)
 
-        gait(3,length,time_delay)
-        gait(4,length,time_delay)
+            gait(3,length,time_delay)
+            gait(4,length,time_delay)
+        
+        if speed<0: #Cuando retrocede
+            gait(4,length,time_delay)
+            gait(3,length,time_delay)
+            
+            dummy_traslation(4*length/2,0, time_delay)
+            rospy.sleep(1)
+
+            gait(2,length,time_delay)
+            gait(1,length,time_delay)
 
         dummy_traslation(-length/2,0, time_delay)
 
