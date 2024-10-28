@@ -85,7 +85,8 @@ def plan_circle( center_x : float , center_y : float , r : float , theta_o : flo
     return pos
 
 def gait(foot_number, length, time_delay): #Front foot? True or False
-    steps = 5
+    steps = 10
+    length = length/2
     global current_position
     n = 2*foot_number -1
     joint_position_state = current_position
@@ -99,10 +100,8 @@ def gait(foot_number, length, time_delay): #Front foot? True or False
             posd = plan_circle(first_position[0]+length, first_position[1], length, 0,180, False, True, steps)
     else:
         if foot_number>2: #Para las patas traseras
-            print("ja")
             posd = plan_circle(first_position[0]-length, first_position[1], length, 0,180, True, False, steps)
         else: #Patas delanteras
-            print("hoa")
             print(first_position[0]+length, first_position[1])
             posd = plan_circle(first_position[0]+length, first_position[1], length, 0,180,  False, False, steps)
             print(posd)
@@ -126,7 +125,7 @@ def dummy_traslation(x,z):
     base_new_arm = angles_new_arm(current_position[0],current_position[1])
     point_new_arm = FK(base_new_arm[0],base_new_arm[1],False)
     new_point = (point_new_arm[0]+x, point_new_arm[1]+z)
-    print("first position new arm: ",point_new_arm)
+    #print("first position new arm: ",point_new_arm)
     #print("new point: ",new_point)
     new_angles = IK(new_point[0],new_point[1],False)
     angles = angles_buddy_arm(new_angles[0],new_angles[1])
@@ -139,12 +138,40 @@ def dummy_traslation(x,z):
     new_point_b = (point_new_arm_b[0]-x, point_new_arm_b[1]+z)
     new_angles_b = IK(new_point_b[0],new_point_b[1],False)
     angles_b = angles_buddy_arm(new_angles_b[0],new_angles_b[1])
-    print("first position new arm: ",point_new_arm_b)
+    #print("first position new arm: ",point_new_arm_b)
 
 
     joint_position_state=[angles[0],angles[1] ,angles[0],angles[1],angles_b[0],angles_b[1],angles_b[0],angles_b[1]] # stand up principal
     send_joints(joint_position_state)
     rospy.sleep(0.1)
+
+    # Parámetros iniciales y finales
+    initial_angles = [current_position[0], current_position[1], current_position[4], current_position[5]]
+    final_angles_front = [angles[0], angles[1]]  # Para las patas delanteras
+    final_angles_back = [angles_b[0], angles_b[1]]  # Para las patas traseras
+
+    # Número de pasos para interpolar entre posiciones
+    num_steps = 20
+
+    for step in range(num_steps + 1):
+        # Interpolación lineal para cada ángulo
+        front_left_angle_1 = initial_angles[0] + (final_angles_front[0] - initial_angles[0]) * (step / num_steps)
+        front_left_angle_2 = initial_angles[1] + (final_angles_front[1] - initial_angles[1]) * (step / num_steps)
+        back_right_angle_1 = initial_angles[2] + (final_angles_back[0] - initial_angles[2]) * (step / num_steps)
+        back_right_angle_2 = initial_angles[3] + (final_angles_back[1] - initial_angles[3]) * (step / num_steps)
+
+        # Construcción del estado de las articulaciones para esta iteración
+        joint_position_state = [
+            front_left_angle_1, front_left_angle_2,  # Pata delantera izquierda
+            front_left_angle_1, front_left_angle_2,  # Pata delantera derecha
+            back_right_angle_1, back_right_angle_2,  # Pata trasera izquierda
+            back_right_angle_1, back_right_angle_2   # Pata trasera derecha
+        ]
+
+        # Enviar las posiciones angulares al robot
+        send_joints(joint_position_state)
+        rospy.sleep(0.05)  # Ajusta el delay para controlar la suavidad del movimiento
+`
     pass
 
 def dummy_rotation(angle):
@@ -189,26 +216,39 @@ def dummy_rotation(angle):
 
 def movement(speed):
     #speed variara de -5 a 5
-    time_delay = abs(speed)*1/10
-    length = 0.1 
+    min_speed = 0
+    max_speed = 5
+    delay_min = 0.05  # en s
+    delay_max = 1  # en s
+    length = 0.15
+
     if speed<0:
         length = -length
+
+    # Suponiendo que `velocidad` es el valor actual de la velocidad
+    time_delay = delay_max - ((abs(speed) - min_speed) / (max_speed - min_speed)) * (delay_max - delay_min)
+    print(time_delay)
+    print(speed)
+    
     
     while speed!=0:
         print("Traslation")
-        dummy_traslation(-0.1,0)
+        dummy_traslation(-length/2,0)
         rospy.sleep(0.05)
         print("Front Gait")
         #1rst leg gait
         gait(1,length,time_delay)
         gait(2,length,time_delay)
         
-        dummy_traslation(0.2,0)
+        dummy_traslation(length/2,0)
+        rospy.sleep(1)
+        dummy_traslation(length/2,0)
+        rospy.sleep(1)
 
         gait(3,length,time_delay)
         gait(4,length,time_delay)
 
-        dummy_traslation(-0.1,0)
+        dummy_traslation(-length/2,0)
     pass
 
 def main():
@@ -265,8 +305,9 @@ def main():
             current_position = joint_position_state
 
         if (number ==3):
+            rospy.sleep(1)
             user = input ("Enter Speed: ")
-            velocity = int(imp)
+            velocity = int(user)
             movement(velocity)
             pass
 
