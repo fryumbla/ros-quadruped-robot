@@ -209,7 +209,7 @@ def movement(speed):
 
     if speed<0:
         length = -length
-
+ 
     # Suponiendo que `velocidad` es el valor actual de la velocidad
     time_delay = delay_max - ((abs(speed) - min_speed) / (max_speed - min_speed)) * (delay_max - delay_min)
     print(time_delay)

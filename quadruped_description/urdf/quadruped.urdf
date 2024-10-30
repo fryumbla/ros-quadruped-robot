@@ -43,9 +43,9 @@
   <link name="front_left_u">
     <inertial>
       <mass value="0.814" />
-      <inertia ixx="0.008 " ixy="0"  ixz="0.001 "
-               iyy="0.008 " iyz="0.001 "
-               izz="0.001 " />
+      <inertia ixx="0.008" ixy="0.0"  ixz="0.001"
+               iyy="0.008" iyz="0.001"
+               izz="0.001" />
     </inertial>
     <visual>
       <origin rpy="1.57 0 1.57" xyz="0 0 0"/>
