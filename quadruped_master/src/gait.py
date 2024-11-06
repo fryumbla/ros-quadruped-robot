@@ -115,29 +115,41 @@ def gait(foot_number, length, time_delay): #Front foot? True or False
         send_joints(joint_position_state)
         rospy.sleep(time_delay)
     pass
+def dummy_traslation(x_trasl, z_trasl, angle ,current_pos):
+    #falta revisar la rotacion
 
-def dummy_traslation(x,z, time_delay):
-    global current_position
+    d = 0.22 #Distancia del dummy entra pata y pata
+    angle = - np.pi*angle/180
+    z_rotation = (d)*sin(angle)
+    x_rotation = -(d)*(cos(angle)) + d
+
+    positions_plan = []
     joint_position_goal = [0,0,0,0,0,0,0,0]
     pre_position = [(0,0),(0,0),(0,0),(0,0)]
     final_position = [(0,0),(0,0),(0,0),(0,0)]
+
     for i in range(4):
-        x_new = x
+        x_rotation = abs(x_rotation)
+        z_rotation = abs(z_rotation)
+        x_trasl = abs(x_trasl)
+        z_trasl = abs(z_trasl)
         n = 2*i 
-        base_new_arm = angles_new_arm(current_position[n],current_position[n+1])
+        base_new_arm = angles_new_arm(current_pos[n],current_pos[n+1])
         point_new_arm = FK(base_new_arm[0],base_new_arm[1],False)
-        pre_position[i] = point_new_arm
+        pre_position[i] = point_new_arm 
 
         if i >= 2:
             print("back")
-            x_new = -x
+            x_trasl = -x_trasl
         else:
             print("frontal")
+            x_rotation = -x_rotation
+            z_rotation = -z_rotation
 
-        new_point = (point_new_arm[0]+x_new, point_new_arm[1]+z)
+        new_point = (point_new_arm[0]+ x_trasl+ x_rotation, point_new_arm[1]+ z_trasl + z_rotation)
         final_position[i] = new_point
 
-    steps = 20
+    steps = 10
 
     for step in range(steps+1):
         interpolated_position = [(0,0),(0,0),(0,0),(0,0)]
@@ -147,17 +159,15 @@ def dummy_traslation(x,z, time_delay):
             m = 2*a
             x_interp = pre_position[a][0] + (final_position[a][0] - pre_position[a][0]) * (step / steps)
             z_interp = pre_position[a][1] + (final_position[a][1] - pre_position[a][1]) * (step / steps)
-            #print(x_interp,z_interp)
 
             new_angles = IK(x_interp,z_interp,False)
             angles = angles_buddy_arm(new_angles[0],new_angles[1])
             joint_position_goal[m] = angles[0]
             joint_position_goal[m+1] = angles[1]
-        send_joints(joint_position_goal)
-        #print(joint_position_goal)
-        rospy.sleep(time_delay)
 
-    pass
+        positions_plan.append(joint_position_goal.copy())
+    
+    return positions_plan
 
 def dummy_rotation(angle):
 

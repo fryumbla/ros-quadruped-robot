@@ -306,7 +306,7 @@
 
   <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
   <!-- Transmissions for ROS Control -->
-
+<!-- 
   <transmission name="tran1">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="front_right_joint1">
@@ -400,7 +400,7 @@
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>/quadruped</robotNamespace>
     </plugin>
-  </gazebo>
+  </gazebo> -->
 
 
 
