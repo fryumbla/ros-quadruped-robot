@@ -9,6 +9,9 @@ from math import pi, cos, sin, acos, atan2
 global current_position
 current_position = [0,0,0,0,0,0,0,0]
 
+global rot_angle
+rot_angle = 0
+
 def FK(theta1,theta2, base_on_dummy):
     #t1 = theta1*180/np.pi
     #t2 = theta2*180/np.pi
@@ -116,56 +119,24 @@ def gait(foot_number, length, time_delay): #Front foot? True or False
         rospy.sleep(time_delay)
     pass
 
-# def dummy_traslation(x,z, time_delay):
-#     global current_position
-#     joint_position_goal = [0,0,0,0,0,0,0,0]
-#     pre_position = [(0,0),(0,0),(0,0),(0,0)]
-#     final_position = [(0,0),(0,0),(0,0),(0,0)]
-#     for i in range(4):
-#         x_new = x
-#         n = 2*i 
-#         base_new_arm = angles_new_arm(current_position[n],current_position[n+1])
-#         point_new_arm = FK(base_new_arm[0],base_new_arm[1],False)
-#         pre_position[i] = point_new_arm
-
-#         if i >= 2:
-#             print("back")
-#             x_new = -x
-#         else:
-#             print("frontal")
-
-#         new_point = (point_new_arm[0]+x_new, point_new_arm[1]+z)
-#         final_position[i] = new_point
-
-#     steps = 20
-
-#     for step in range(steps+1):
-#         interpolated_position = [(0,0),(0,0),(0,0),(0,0)]
-#         #print("interpolacion")
-
-#         for a in range(4):
-#             m = 2*a
-#             x_interp = pre_position[a][0] + (final_position[a][0] - pre_position[a][0]) * (step / steps)
-#             z_interp = pre_position[a][1] + (final_position[a][1] - pre_position[a][1]) * (step / steps)
-#             #print(x_interp,z_interp)
-
-#             new_angles = IK(x_interp,z_interp,False)
-#             angles = angles_buddy_arm(new_angles[0],new_angles[1])
-#             joint_position_goal[m] = angles[0]
-#             joint_position_goal[m+1] = angles[1]
-#         send_joints(joint_position_goal)
-#         #print(joint_position_goal)
-#         rospy.sleep(time_delay)
-
-#     pass
-
-def dummy_traslation(x_trasl, z_trasl, angle ,current_pos):
+def dummy_traslation(x_trasl, z_trasl, angle ,time_delay):
     #falta revisar la rotacion
-
+    global current_position
+    global rot_angle
+    print(rot_angle)
+    
     d = 0.22 #Distancia del dummy entra pata y pata
     angle = - np.pi*angle/180
     z_rotation = (d)*sin(angle)
     x_rotation = -(d)*(cos(angle)) + d
+    print("antes")
+    print(x_rotation,z_rotation)
+
+    trans_x = x_trasl*cos(rot_angle) - z_trasl*sin(rot_angle)
+    trans_z = x_trasl*sin(rot_angle) + z_trasl*cos(rot_angle)
+
+    print("despues")
+    print(trans_x,trans_z)
 
     positions_plan = []
     joint_position_goal = [0,0,0,0,0,0,0,0]
@@ -173,30 +144,31 @@ def dummy_traslation(x_trasl, z_trasl, angle ,current_pos):
     final_position = [(0,0),(0,0),(0,0),(0,0)]
 
     for i in range(4):
-        x_rotation = abs(x_rotation)
-        z_rotation = abs(z_rotation)
-        x_trasl = abs(x_trasl)
-        z_trasl = abs(z_trasl)
+
+        new_x_trasl = trans_x
+
+        new_x_rot = x_rotation
+        new_z_rot = z_rotation
+
         n = 2*i 
-        base_new_arm = angles_new_arm(current_pos[n],current_pos[n+1])
+        base_new_arm = angles_new_arm(current_position[n],current_position[n+1])
         point_new_arm = FK(base_new_arm[0],base_new_arm[1],False)
         pre_position[i] = point_new_arm 
 
         if i >= 2:
-            print("back")
-            x_trasl = -x_trasl
+            new_x_trasl = -x_trasl
         else:
-            print("frontal")
-            x_rotation = -x_rotation
-            z_rotation = -z_rotation
+            new_x_rot = -x_rotation
+            new_z_rot = -z_rotation
 
-        new_point = (point_new_arm[0]+ x_trasl+ x_rotation, point_new_arm[1]+ z_trasl + z_rotation)
+        new_point = (point_new_arm[0]+ new_x_trasl+ new_x_rot, point_new_arm[1]+ trans_z + new_z_rot)
+        # print(point_new_arm)
+        # print(new_point)
         final_position[i] = new_point
 
-    steps = 10
+    steps = 20
 
     for step in range(steps+1):
-        interpolated_position = [(0,0),(0,0),(0,0),(0,0)]
         #print("interpolacion")
 
         for a in range(4):
@@ -209,13 +181,17 @@ def dummy_traslation(x_trasl, z_trasl, angle ,current_pos):
             joint_position_goal[m] = angles[0]
             joint_position_goal[m+1] = angles[1]
 
-        positions_plan.append(joint_position_goal.copy())
+
+        send_joints(joint_position_goal)
+        rospy.sleep(time_delay)
     
+    rot_angle = angle    
     return positions_plan
 
 def movement(speed):
     #speed variara de -5 a 5
     min_speed = 0
+    count = 0
     max_speed = 5
     delay_min = 0.1  # en s
     delay_max = 0.5  # en s
@@ -230,16 +206,14 @@ def movement(speed):
     print(speed)
     
     
-    while speed!=0:
-        print("Traslation")
-        dummy_traslation(-length/2,0,time_delay)
+    while count<=2:
+        dummy_traslation(-length/2,0,0,time_delay)
         rospy.sleep(0.05)
-        print("Front Gait")
         if speed>0: #Cuando Avanza
             gait(1,length,time_delay)
             gait(2,length,time_delay)
             
-            dummy_traslation(4*length/2,0, time_delay)
+            dummy_traslation(4*length/2,0,0, time_delay)
             rospy.sleep(1)
 
             gait(3,length,time_delay)
@@ -249,13 +223,14 @@ def movement(speed):
             gait(4,length,time_delay)
             gait(3,length,time_delay)
             
-            dummy_traslation(4*length/2,0, time_delay)
+            dummy_traslation(4*length/2,0,0, time_delay)
             rospy.sleep(1)
 
             gait(2,length,time_delay)
             gait(1,length,time_delay)
 
-        dummy_traslation(-length/2,0, time_delay)
+        dummy_traslation(-length/2,0,0, time_delay)
+        count +=1
 
     pass
 
@@ -294,15 +269,16 @@ def main():
         imp = input ("Enter number: ")
         number = int(imp)
         if (number==1):
-            print("Stand")
+            print("Home")
             joint_position_state=[stand_1, stand_2,stand_1,stand_2,stand_1,stand_2,stand_1,stand_2] # stand up principal
             joints_states.position = joint_position_state
             pub.publish(joints_states)
             current_position = joint_position_state
 
+
         if (number==2):
             # up
-            print("Up position")
+            print("Home position")
             joint_position_state=[-1,2.2,-1,2.2,-1,2.2,-1,2.2]
             joints_states.position = joint_position_state
             pub.publish(joints_states)
@@ -312,20 +288,36 @@ def main():
             pub.publish(joints_states)
             current_position = joint_position_state
 
+
         if (number ==3):
             rospy.sleep(1)
             user = input ("Enter Speed: ")
             velocity = int(user)
             movement(velocity)
-            pass
 
         if (number ==4):
-            plan = dummy_traslation(-0.1, 0.0, 10,current_position)
-            for x in plan:
-                joints_states.position = x
-                pub.publish(joints_states)
-                current_position = joint_position_state
-                rospy.sleep(0.5)
+            print("Traslation 10 cm a al izquierda")
+            dummy_traslation(-0.1, 0.0, 0,0.1)
+
+        if (number ==5):
+            print("Traslation 20 cm a la derecha")
+            dummy_traslation(0.2, 0.0, 0, 0.1)
+
+        if (number ==6):
+            print("Traslation 10 cm arriba")
+            dummy_traslation(0.0, 0.1, 0,0.1)
+
+        if (number ==7):
+            print("Traslation 20 cm abajo")
+            dummy_traslation(0.0, -0.2, 0,0.1)
+
+        if (number ==8):
+            print("Rotation 30 degrees")
+            dummy_traslation(0.0, 0.0, 30,0.1)
+
+        if (number ==9):
+            print("Rotation -30 degrees")
+            dummy_traslation(0.0, 0.0, -30,0.1)
 
 
 
