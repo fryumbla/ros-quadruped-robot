@@ -9,6 +9,9 @@ from math import pi, cos, sin, acos, atan2
 global current_position
 current_position = [0,0,0,0,0,0,0,0]
 
+global rot_angle
+rot_angle = 0
+
 def FK(theta1,theta2, base_on_dummy):
     #t1 = theta1*180/np.pi
     #t2 = theta2*180/np.pi
@@ -115,13 +118,25 @@ def gait(foot_number, length, time_delay): #Front foot? True or False
         send_joints(joint_position_state)
         rospy.sleep(time_delay)
     pass
-def dummy_traslation(x_trasl, z_trasl, angle ,current_pos):
-    #falta revisar la rotacion
 
+def dummy_traslation(x_trasl, z_trasl, angle ,time_delay):
+    #falta revisar la rotacion
+    global current_position
+    global rot_angle
+    print(rot_angle)
+    
     d = 0.22 #Distancia del dummy entra pata y pata
     angle = - np.pi*angle/180
     z_rotation = (d)*sin(angle)
     x_rotation = -(d)*(cos(angle)) + d
+    print("antes")
+    print(x_rotation,z_rotation)
+
+    trans_x = x_trasl*cos(rot_angle) - z_trasl*sin(rot_angle)
+    trans_z = x_trasl*sin(rot_angle) + z_trasl*cos(rot_angle)
+
+    print("despues")
+    print(trans_x,trans_z)
 
     positions_plan = []
     joint_position_goal = [0,0,0,0,0,0,0,0]
@@ -129,30 +144,31 @@ def dummy_traslation(x_trasl, z_trasl, angle ,current_pos):
     final_position = [(0,0),(0,0),(0,0),(0,0)]
 
     for i in range(4):
-        x_rotation = abs(x_rotation)
-        z_rotation = abs(z_rotation)
-        x_trasl = abs(x_trasl)
-        z_trasl = abs(z_trasl)
+
+        new_x_trasl = trans_x
+
+        new_x_rot = x_rotation
+        new_z_rot = z_rotation
+
         n = 2*i 
-        base_new_arm = angles_new_arm(current_pos[n],current_pos[n+1])
+        base_new_arm = angles_new_arm(current_position[n],current_position[n+1])
         point_new_arm = FK(base_new_arm[0],base_new_arm[1],False)
         pre_position[i] = point_new_arm 
 
         if i >= 2:
-            print("back")
-            x_trasl = -x_trasl
+            new_x_trasl = -x_trasl
         else:
-            print("frontal")
-            x_rotation = -x_rotation
-            z_rotation = -z_rotation
+            new_x_rot = -x_rotation
+            new_z_rot = -z_rotation
 
-        new_point = (point_new_arm[0]+ x_trasl+ x_rotation, point_new_arm[1]+ z_trasl + z_rotation)
+        new_point = (point_new_arm[0]+ new_x_trasl+ new_x_rot, point_new_arm[1]+ trans_z + new_z_rot)
+        # print(point_new_arm)
+        # print(new_point)
         final_position[i] = new_point
 
     steps = 10
 
     for step in range(steps+1):
-        interpolated_position = [(0,0),(0,0),(0,0),(0,0)]
         #print("interpolacion")
 
         for a in range(4):
@@ -165,53 +181,17 @@ def dummy_traslation(x_trasl, z_trasl, angle ,current_pos):
             joint_position_goal[m] = angles[0]
             joint_position_goal[m+1] = angles[1]
 
-        positions_plan.append(joint_position_goal.copy())
+
+        send_joints(joint_position_goal)
+        rospy.sleep(time_delay)
     
+    rot_angle = angle    
     return positions_plan
-
-def dummy_rotation(angle):
-
-    print("Rotation", angle)
-    d = 0.22 #Distancia del dummy entra pata y pata
-    angle = - np.pi*angle/180
-    z = (d)*sin(angle)
-    x = -(d)*(cos(angle)) + d
-    #z = 0.22
-    #x = 0.22
-    #FRONT
-    #print("Dummy rotation")
-    global current_position
-    first_position = FK(current_position[0], current_position[1],True)
-    #print("first position: ", first_position)
-    base_new_arm = angles_new_arm(current_position[0],current_position[1])
-    point_new_arm = FK(base_new_arm[0],base_new_arm[1],False)
-    new_point = (point_new_arm[0]-x, point_new_arm[1]-z)
-    print("first position new arm: ",point_new_arm)
-    print("new point: ",new_point)
-    new_angles = IK(new_point[0],new_point[1],False)
-    angles = angles_buddy_arm(new_angles[0],new_angles[1])
-    #print("Angles new arm: ",new_angles )
-    #print("Angles buddy arm: ",angles )
-
-    #BACK
-    base_new_arm_b = angles_new_arm(current_position[0],current_position[1])
-    point_new_arm_b = FK(base_new_arm_b[0],base_new_arm_b[1],False)
-    new_point_b = (point_new_arm_b[0]+x, point_new_arm_b[1]+z)
-    print("first position new arm: ",point_new_arm_b)
-    print("new point: ",new_point_b)
-    new_angles_b = IK(new_point_b[0],new_point_b[1],False)
-    angles_b = angles_buddy_arm(new_angles_b[0],new_angles_b[1])
-    #print("Angles buddy arm: ",angles_b )
-
-    joint_position_state=[angles[0],angles[1] ,angles[0],angles[1],angles_b[0],angles_b[1],angles_b[0],angles_b[1]] # stand up principal
-    send_joints(joint_position_state)
-
-    rospy.sleep(0.5)
-    pass
 
 def movement(speed):
     #speed variara de -5 a 5
     min_speed = 0
+    count = 0
     max_speed = 5
     delay_min = 0.1  # en s
     delay_max = 0.5  # en s
@@ -219,23 +199,21 @@ def movement(speed):
 
     if speed<0:
         length = -length
-
+ 
     # Suponiendo que `velocidad` es el valor actual de la velocidad
     time_delay = delay_max - ((abs(speed) - min_speed) / (max_speed - min_speed)) * (delay_max - delay_min)
     print(time_delay)
     print(speed)
     
     
-    while speed!=0:
-        print("Traslation")
-        dummy_traslation(-length/2,0,time_delay)
+    while count<=2:
+        dummy_traslation(-length/2,0,0,time_delay)
         rospy.sleep(0.05)
-        print("Front Gait")
         if speed>0: #Cuando Avanza
             gait(1,length,time_delay)
             gait(2,length,time_delay)
             
-            dummy_traslation(4*length/2,0, time_delay)
+            dummy_traslation(4*length/2,0,0, time_delay)
             rospy.sleep(1)
 
             gait(3,length,time_delay)
@@ -245,13 +223,14 @@ def movement(speed):
             gait(4,length,time_delay)
             gait(3,length,time_delay)
             
-            dummy_traslation(4*length/2,0, time_delay)
+            dummy_traslation(4*length/2,0,0, time_delay)
             rospy.sleep(1)
 
             gait(2,length,time_delay)
             gait(1,length,time_delay)
 
-        dummy_traslation(-length/2,0, time_delay)
+        dummy_traslation(-length/2,0,0, time_delay)
+        count +=1
 
     pass
 
@@ -290,15 +269,16 @@ def main():
         imp = input ("Enter number: ")
         number = int(imp)
         if (number==1):
-            print("Stand")
+            print("Home")
             joint_position_state=[stand_1, stand_2,stand_1,stand_2,stand_1,stand_2,stand_1,stand_2] # stand up principal
             joints_states.position = joint_position_state
             pub.publish(joints_states)
             current_position = joint_position_state
 
+
         if (number==2):
             # up
-            print("Up position")
+            print("Home position")
             joint_position_state=[-1,2.2,-1,2.2,-1,2.2,-1,2.2]
             joints_states.position = joint_position_state
             pub.publish(joints_states)
@@ -308,15 +288,36 @@ def main():
             pub.publish(joints_states)
             current_position = joint_position_state
 
+
         if (number ==3):
             rospy.sleep(1)
             user = input ("Enter Speed: ")
             velocity = int(user)
             movement(velocity)
-            pass
+
         if (number ==4):
-            rospy.sleep(1)
-            dummy_traslation(0.1,0, 0.1)
+            print("Traslation 10 cm a al izquierda")
+            dummy_traslation(-0.1, 0.0, 0,0.1)
+
+        if (number ==5):
+            print("Traslation 20 cm a la derecha")
+            dummy_traslation(0.2, 0.0, 0, 0.1)
+
+        if (number ==6):
+            print("Traslation 10 cm arriba")
+            dummy_traslation(0.0, 0.1, 0,0.1)
+
+        if (number ==7):
+            print("Traslation 20 cm abajo")
+            dummy_traslation(0.0, -0.2, 0,0.1)
+
+        if (number ==8):
+            print("Rotation 30 degrees")
+            dummy_traslation(0.0, 0.0, 30,0.1)
+
+        if (number ==9):
+            print("Rotation -30 degrees")
+            dummy_traslation(0.0, 0.0, -30,0.1)
 
 
 
@@ -327,7 +328,8 @@ if __name__ == '__main__':
     joints_states = JointState()
 
     main()
-    # dummy_traslation(0.1,0)
+
+
     # angles = (1.78,1)
     # a = FK(angles[0],angles[1],True)
     # print("Forward kinematics: ",a)
